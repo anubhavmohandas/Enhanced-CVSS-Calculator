@@ -35,23 +35,6 @@
             padding: 40px 30px;
             text-align: center;
             position: relative;
-            overflow: hidden;
-        }
-
-        .header::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
-            animation: rotate 20s linear infinite;
-        }
-
-        @keyframes rotate {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
         }
 
         .header h1 {
@@ -61,8 +44,6 @@
             align-items: center;
             justify-content: center;
             gap: 20px;
-            position: relative;
-            z-index: 1;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
         }
 
@@ -71,8 +52,6 @@
             opacity: 0.95;
             max-width: 700px;
             margin: 0 auto;
-            position: relative;
-            z-index: 1;
             line-height: 1.6;
         }
 
@@ -89,12 +68,11 @@
             border-radius: 15px;
             border: 1px solid rgba(255,255,255,0.1);
             backdrop-filter: blur(5px);
-            transition: all 0.3s ease;
+            transition: transform 0.3s ease;
         }
 
         .section:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+            transform: translateY(-2px);
         }
 
         .section h2 {
@@ -108,7 +86,6 @@
 
         .metric-group {
             margin-bottom: 25px;
-            position: relative;
         }
 
         .metric-group label {
@@ -128,19 +105,17 @@
             background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%);
             color: #ffffff;
             backdrop-filter: blur(5px);
-            transition: all 0.3s ease;
+            transition: all 0.2s ease;
         }
 
         .metric-group select:focus {
             border-color: #667eea;
             outline: none;
             box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.3);
-            transform: scale(1.02);
         }
 
         .metric-group select:hover {
             border-color: #667eea;
-            transform: translateY(-2px);
         }
 
         .metric-group select option {
@@ -156,31 +131,11 @@
             border-radius: 12px;
             margin-bottom: 25px;
             box-shadow: 0 10px 25px rgba(240, 147, 251, 0.3);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .formula-box::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-            animation: shimmer 2s infinite;
-        }
-
-        @keyframes shimmer {
-            0% { left: -100%; }
-            100% { left: 100%; }
         }
 
         .formula-box h3 {
             margin-bottom: 15px;
             font-size: 1.3em;
-            position: relative;
-            z-index: 1;
         }
 
         .formula-box code {
@@ -190,8 +145,6 @@
             font-family: 'Courier New', monospace;
             font-size: 1.1em;
             display: block;
-            position: relative;
-            z-index: 1;
             border: 1px solid rgba(255,255,255,0.2);
         }
 
@@ -202,31 +155,11 @@
             border-radius: 12px;
             margin-bottom: 25px;
             box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .calculation-box::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            right: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
-            animation: shimmerReverse 2.5s infinite;
-        }
-
-        @keyframes shimmerReverse {
-            0% { right: -100%; }
-            100% { right: 100%; }
         }
 
         .calculation-box h3 {
             margin-bottom: 15px;
             font-size: 1.3em;
-            position: relative;
-            z-index: 1;
         }
 
         .calculation-box code {
@@ -237,8 +170,6 @@
             font-size: 1em;
             display: block;
             word-break: break-all;
-            position: relative;
-            z-index: 1;
             border: 1px solid rgba(255,255,255,0.2);
         }
 
@@ -248,25 +179,7 @@
             margin-bottom: 25px;
             text-align: center;
             border: 3px solid;
-            transition: all 0.5s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .score-display::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
-            animation: pulse 3s ease-in-out infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 0.5; transform: scale(1); }
-            50% { opacity: 1; transform: scale(1.05); }
+            transition: all 0.3s ease;
         }
 
         .score-display h3 {
@@ -276,16 +189,12 @@
             align-items: center;
             justify-content: center;
             gap: 10px;
-            position: relative;
-            z-index: 1;
         }
 
         .score-display .score {
             font-size: 3.5em;
             font-weight: bold;
             margin-bottom: 20px;
-            position: relative;
-            z-index: 1;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
         }
 
@@ -296,36 +205,34 @@
             align-items: center;
             justify-content: center;
             gap: 10px;
-            position: relative;
-            z-index: 1;
         }
 
         .risk-critical {
             background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
             color: #ffffff;
             border-color: #fca5a5;
-            box-shadow: 0 0 30px rgba(220, 38, 38, 0.5);
+            box-shadow: 0 0 20px rgba(220, 38, 38, 0.4);
         }
 
         .risk-high {
             background: linear-gradient(135deg, #ea580c 0%, #c2410c 100%);
             color: #ffffff;
             border-color: #fdba74;
-            box-shadow: 0 0 30px rgba(234, 88, 12, 0.5);
+            box-shadow: 0 0 20px rgba(234, 88, 12, 0.4);
         }
 
         .risk-medium {
             background: linear-gradient(135deg, #d97706 0%, #b45309 100%);
             color: #ffffff;
             border-color: #fcd34d;
-            box-shadow: 0 0 30px rgba(217, 119, 6, 0.5);
+            box-shadow: 0 0 20px rgba(217, 119, 6, 0.4);
         }
 
         .risk-low {
             background: linear-gradient(135deg, #16a34a 0%, #15803d 100%);
             color: #ffffff;
             border-color: #86efac;
-            box-shadow: 0 0 30px rgba(22, 163, 74, 0.5);
+            box-shadow: 0 0 20px rgba(22, 163, 74, 0.4);
         }
 
         .risk-none {
@@ -354,12 +261,6 @@
             align-items: center;
             padding: 12px 0;
             border-bottom: 1px solid rgba(255,255,255,0.1);
-            transition: all 0.3s ease;
-        }
-
-        .guideline-item:hover {
-            transform: translateX(10px);
-            padding-left: 10px;
         }
 
         .guideline-item:last-child {
@@ -378,28 +279,11 @@
             cursor: pointer;
             transition: all 0.3s ease;
             margin-top: 25px;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .reset-btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-            transition: all 0.3s ease;
-        }
-
-        .reset-btn:hover::before {
-            left: 100%;
         }
 
         .reset-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
         }
 
         .assessment-box {
@@ -410,38 +294,15 @@
             margin-top: 25px;
             border-left: 5px solid #f97316;
             box-shadow: 0 10px 25px rgba(251, 191, 36, 0.3);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .assessment-box::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(45deg, transparent 49%, rgba(255,255,255,0.1) 50%, transparent 51%);
-            background-size: 20px 20px;
-            animation: stripes 1s linear infinite;
-        }
-
-        @keyframes stripes {
-            0% { background-position: 0 0; }
-            100% { background-position: 20px 0; }
         }
 
         .assessment-box h3 {
             margin-bottom: 15px;
             font-weight: 600;
             font-size: 1.3em;
-            position: relative;
-            z-index: 1;
         }
 
         .assessment-box p {
-            position: relative;
-            z-index: 1;
             line-height: 1.6;
         }
 
@@ -535,7 +396,7 @@
                 
                 <div class="metric-group">
                     <label for="attackVector" class="tooltip" data-tooltip="How the vulnerability can be exploited">Attack Vector (AV)</label>
-                    <select id="attackVector">
+                    <select id="attackVector" onchange="calculateExploitability()">
                         <option value="">Select Attack Vector</option>
                         <option value="network">Network (N) - 0.85 - Exploitable remotely</option>
                         <option value="adjacent">Adjacent (A) - 0.62 - Same network segment</option>
@@ -546,7 +407,7 @@
 
                 <div class="metric-group">
                     <label for="attackComplexity" class="tooltip" data-tooltip="Conditions beyond attacker's control that must exist">Attack Complexity (AC)</label>
-                    <select id="attackComplexity">
+                    <select id="attackComplexity" onchange="calculateExploitability()">
                         <option value="">Select Attack Complexity</option>
                         <option value="low">Low (L) - 0.77 - No special conditions</option>
                         <option value="high">High (H) - 0.44 - Special conditions required</option>
@@ -555,7 +416,7 @@
 
                 <div class="metric-group">
                     <label for="scope" class="tooltip" data-tooltip="Whether exploitation affects components beyond the vulnerable one">Scope (S) - affects PR calculation</label>
-                    <select id="scope">
+                    <select id="scope" onchange="updatePrivilegesRequiredOptions()">
                         <option value="unchanged">Unchanged (U) - Same authorization scope</option>
                         <option value="changed">Changed (C) - Different authorization scope</option>
                     </select>
@@ -563,17 +424,17 @@
 
                 <div class="metric-group">
                     <label for="privilegesRequired" class="tooltip" data-tooltip="Level of privileges attacker must possess">Privileges Required (PR)</label>
-                    <select id="privilegesRequired">
+                    <select id="privilegesRequired" onchange="calculateExploitability()">
                         <option value="">Select Privileges Required</option>
                         <option value="none">None (N) - 0.85 - No privileges needed</option>
-                        <option value="low" data-unchanged="0.62" data-changed="0.68">Low (L) - Basic user privileges</option>
-                        <option value="high" data-unchanged="0.27" data-changed="0.50">High (H) - Administrative privileges</option>
+                        <option value="low" data-unchanged="0.62" data-changed="0.68">Low (L) - 0.62 - Basic user privileges</option>
+                        <option value="high" data-unchanged="0.27" data-changed="0.50">High (H) - 0.27 - Administrative privileges</option>
                     </select>
                 </div>
 
                 <div class="metric-group">
                     <label for="userInteraction" class="tooltip" data-tooltip="Whether exploitation requires user participation">User Interaction (UI)</label>
-                    <select id="userInteraction">
+                    <select id="userInteraction" onchange="calculateExploitability()">
                         <option value="">Select User Interaction</option>
                         <option value="none">None (N) - 0.85 - No user interaction needed</option>
                         <option value="required">Required (R) - 0.62 - User must participate</option>
@@ -646,7 +507,7 @@
     </div>
 
     <script>
-        // Enhanced metric values with improved precision
+        // Metric values with improved precision
         const metricValues = {
             attackVector: {
                 network: 0.85,
@@ -669,28 +530,12 @@
             }
         };
 
-        // Enhanced assessment messages
+        // Assessment messages
         const assessmentMessages = {
-            critical: [
-                'This vulnerability has critical exploitability with maximum risk exposure. Immediate remediation is required.',
-                'Deploy emergency patches and implement temporary mitigations immediately.',
-                'Consider taking affected systems offline until patches can be applied.'
-            ],
-            high: [
-                'This vulnerability has high exploitability and poses significant risk to your environment.',
-                'Prioritize remediation within 24-48 hours and implement monitoring for exploitation attempts.',
-                'Review access controls and network segmentation to limit exposure.'
-            ],
-            medium: [
-                'This vulnerability has medium exploitability requiring planned remediation.',
-                'Schedule patching within the next maintenance window and monitor for unusual activity.',
-                'Implement additional security layers if immediate patching is not feasible.'
-            ],
-            low: [
-                'This vulnerability has low exploitability with limited immediate risk.',
-                'Include in regular patching cycles and maintain awareness of potential escalation vectors.',
-                'Monitor security advisories for changes in threat landscape.'
-            ]
+            critical: 'This vulnerability has critical exploitability with maximum risk exposure. Immediate remediation is required. Deploy emergency patches and implement temporary mitigations immediately.',
+            high: 'This vulnerability has high exploitability and poses significant risk to your environment. Prioritize remediation within 24-48 hours and implement monitoring for exploitation attempts.',
+            medium: 'This vulnerability has medium exploitability requiring planned remediation. Schedule patching within the next maintenance window and monitor for unusual activity.',
+            low: 'This vulnerability has low exploitability with limited immediate risk. Include in regular patching cycles and maintain awareness of potential escalation vectors.'
         };
 
         function updatePrivilegesRequiredOptions() {
@@ -737,49 +582,68 @@
                 prValue = metricValues.privilegesRequired[pr][scope];
             }
 
-            // Enhanced exploitability calculation with precision
+            // Exploitability calculation
             const exploitability = parseFloat((8.22 * avValue * acValue * prValue * uiValue).toFixed(3));
 
-            // Update calculation display with enhanced formatting
+            // Update calculation display
             const calculation = `8.22 × ${avValue.toFixed(2)} × ${acValue.toFixed(2)} × ${prValue.toFixed(2)} × ${uiValue.toFixed(2)} = ${exploitability.toFixed(2)}`;
             document.getElementById('calculationDisplay').textContent = calculation;
 
-            // Update score with animation
-            const scoreElement = document.getElementById('scoreValue');
-            scoreElement.style.transform = 'scale(1.1)';
-            setTimeout(() => {
-                scoreElement.textContent = exploitability.toFixed(2);
-                scoreElement.style.transform = 'scale(1)';
-            }, 150);
+            // Update score
+            document.getElementById('scoreValue').textContent = exploitability.toFixed(2);
 
-            // Enhanced risk level determination
-            let riskLevel, riskClass, assessmentTexts;
+            // Risk level determination
+            let riskLevel, riskClass, assessmentText;
             if (exploitability >= 6.0) {
                 riskLevel = 'Critical';
                 riskClass = 'risk-critical';
-                assessmentTexts = assessmentMessages.critical;
+                assessmentText = assessmentMessages.critical;
             } else if (exploitability >= 4.0) {
                 riskLevel = 'High';
                 riskClass = 'risk-high';
-                assessmentTexts = assessmentMessages.high;
+                assessmentText = assessmentMessages.high;
             } else if (exploitability >= 2.0) {
                 riskLevel = 'Medium';
                 riskClass = 'risk-medium';
-                assessmentTexts = assessmentMessages.medium;
+                assessmentText = assessmentMessages.medium;
             } else {
                 riskLevel = 'Low';
                 riskClass = 'risk-low';
-                assessmentTexts = assessmentMessages.low;
+                assessmentText = assessmentMessages.low;
             }
 
-            // Animate risk level change
-            const scoreDisplay = document.getElementById('scoreDisplay');
-            scoreDisplay.style.transform = 'scale(0.95)';
-            setTimeout(() => {
-                scoreDisplay.className = 'score-display ' + riskClass;
-                scoreDisplay.style.transform = 'scale(1)';
-            }, 200);
-
-            // Update UI with enhanced content
+            // Update UI
+            document.getElementById('scoreDisplay').className = 'score-display ' + riskClass;
             document.getElementById('riskLevel').style.display = 'flex';
-            document.getElementById('riskText').textContent = 'Risk
+            document.getElementById('riskText').textContent = 'Risk Level: ' + riskLevel;
+            
+            // Show assessment
+            document.getElementById('assessmentBox').style.display = 'block';
+            document.getElementById('assessmentText').textContent = assessmentText;
+        }
+
+        function resetCalculator() {
+            document.getElementById('attackVector').value = '';
+            document.getElementById('attackComplexity').value = '';
+            document.getElementById('scope').value = 'unchanged';
+            document.getElementById('privilegesRequired').value = '';
+            document.getElementById('userInteraction').value = '';
+            
+            // Reset display
+            document.getElementById('scoreValue').textContent = '0.00';
+            document.getElementById('calculationDisplay').textContent = 'Select all metrics to see calculation';
+            document.getElementById('scoreDisplay').className = 'score-display risk-none';
+            document.getElementById('riskLevel').style.display = 'none';
+            document.getElementById('assessmentBox').style.display = 'none';
+            
+            // Update PR options
+            updatePrivilegesRequiredOptions();
+        }
+
+        // Initialize on load
+        document.addEventListener('DOMContentLoaded', function() {
+            updatePrivilegesRequiredOptions();
+        });
+    </script>
+</body>
+</html>
