@@ -4,7 +4,21 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CVSS v3.1 Risk Calculator – Exploitability (Blue Team)</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css">
     <style>
+        :root {
+            --primary-color: #3b82f6;
+            --secondary-color: #6366f1;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --danger-color: #ef4444;
+            --dark-color: #1f2937;
+            --light-color: #f8fafc;
+            --border-color: #e5e7eb;
+            --text-color: #374151;
+            --text-muted: #6b7280;
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -14,7 +28,7 @@
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: #374151;
+            color: var(--text-color);
             line-height: 1.6;
             padding: 20px;
             min-height: 100vh;
@@ -25,24 +39,21 @@
             margin: 0 auto;
             background: rgba(255, 255, 255, 0.95);
             border-radius: 20px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
             overflow: hidden;
-            backdrop-filter: blur(10px);
         }
 
         .header {
-            background: linear-gradient(135deg, #1f2937 0%, #374151 100%);
+            background: var(--dark-color);
             color: white;
             padding: 40px;
             text-align: left;
-            position: relative;
         }
 
         .header h1 {
             font-size: 2.5rem;
             font-weight: 700;
             margin-bottom: 15px;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
         }
 
         .header p {
@@ -63,32 +74,19 @@
         }
 
         .metric-section {
-            background: linear-gradient(145deg, #f8fafc, #e2e8f0);
+            background: var(--light-color);
             padding: 30px;
             border-radius: 15px;
-            border: 1px solid rgba(255,255,255,0.2);
-            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+            border: 1px solid var(--border-color);
         }
 
         .metric-section h2 {
             font-size: 1.6rem;
             font-weight: 700;
-            color: #1f2937;
+            color: var(--dark-color);
             margin-bottom: 30px;
             padding-bottom: 15px;
-            border-bottom: 3px solid #3b82f6;
-            position: relative;
-        }
-
-        .metric-section h2::after {
-            content: '';
-            position: absolute;
-            bottom: -3px;
-            left: 0;
-            width: 50px;
-            height: 3px;
-            background: linear-gradient(90deg, #3b82f6, #8b5cf6);
-            border-radius: 2px;
+            border-bottom: 3px solid var(--primary-color);
         }
 
         .metric-group {
@@ -97,7 +95,7 @@
 
         .metric-label {
             font-weight: 600;
-            color: #374151;
+            color: var(--text-color);
             margin-bottom: 12px;
             font-size: 1.1rem;
         }
@@ -110,34 +108,27 @@
 
         .metric-btn {
             padding: 12px 18px;
-            border: 2px solid #e5e7eb;
+            border: 2px solid var(--border-color);
             background: white;
-            color: #6b7280;
+            color: var(--text-muted);
             border-radius: 8px;
             cursor: pointer;
             font-weight: 500;
-            transition: all 0.2s ease;
             font-size: 0.95rem;
             user-select: none;
+            transition: all 0.15s ease;
         }
 
         .metric-btn:hover {
-            border-color: #3b82f6;
-            color: #3b82f6;
+            border-color: var(--primary-color);
+            color: var(--primary-color);
             transform: translateY(-1px);
-            box-shadow: 0 2px 8px rgba(59, 130, 246, 0.2);
         }
 
         .metric-btn.active {
-            background: linear-gradient(135deg, #1e293b, #334155);
+            background: var(--dark-color);
             color: white;
-            border-color: #1e293b;
-            transform: translateY(-1px);
-            box-shadow: 0 4px 12px rgba(30, 41, 59, 0.3);
-        }
-
-        .metric-btn.active:hover {
-            background: linear-gradient(135deg, #334155, #475569);
+            border-color: var(--dark-color);
         }
 
         .results-grid {
@@ -149,34 +140,27 @@
 
         .result-card {
             background: white;
-            border: 1px solid rgba(255,255,255,0.2);
+            border: 1px solid var(--border-color);
             border-radius: 15px;
             padding: 30px;
             text-align: center;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            transition: transform 0.2s ease;
-            position: relative;
-            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
         }
 
         .result-card::before {
             content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
+            display: block;
+            width: 100%;
             height: 4px;
-            background: linear-gradient(90deg, #3b82f6, #8b5cf6, #ec4899);
-        }
-
-        .result-card:hover {
-            transform: translateY(-2px);
+            background: var(--primary-color);
+            border-radius: 2px 2px 0 0;
+            margin: -30px -30px 20px -30px;
         }
 
         .result-title {
             font-size: 1.2rem;
             font-weight: 600;
-            color: #374151;
+            color: var(--text-color);
             margin-bottom: 15px;
         }
 
@@ -184,17 +168,14 @@
             font-size: 3.5rem;
             font-weight: 800;
             margin-bottom: 15px;
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            color: var(--primary-color);
         }
 
         .result-formula {
             font-size: 0.9rem;
-            color: #6b7280;
+            color: var(--text-muted);
             font-family: 'Courier New', monospace;
-            background: #f8fafc;
+            background: var(--light-color);
             padding: 8px 12px;
             border-radius: 6px;
             margin-top: 10px;
@@ -212,41 +193,38 @@
             border-radius: 10px;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.2s ease;
             font-size: 1rem;
+            transition: all 0.15s ease;
         }
 
         .btn-primary {
-            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+            background: var(--primary-color);
             color: white;
-            box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
         }
 
         .btn-primary:hover {
+            background: #2563eb;
             transform: translateY(-1px);
-            box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
         }
 
         .btn-secondary {
-            background: linear-gradient(135deg, #f8fafc, #e2e8f0);
-            color: #374151;
-            border: 2px solid #d1d5db;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            background: var(--light-color);
+            color: var(--text-color);
+            border: 2px solid var(--border-color);
         }
 
         .btn-secondary:hover {
-            background: linear-gradient(135deg, #e2e8f0, #cbd5e1);
+            background: #e2e8f0;
             transform: translateY(-1px);
         }
 
         .notes {
-            background: linear-gradient(135deg, #dbeafe, #bfdbfe);
+            background: #dbeafe;
             border: 2px solid #93c5fd;
             border-radius: 12px;
             padding: 25px;
             font-size: 0.95rem;
             color: #1e40af;
-            box-shadow: 0 4px 15px rgba(147, 197, 253, 0.2);
         }
 
         .notes strong {
@@ -254,48 +232,87 @@
             color: #1d4ed8;
         }
 
-        /* Severity-based coloring */
-        .severity-critical .result-score {
-            background: linear-gradient(135deg, #dc2626, #ef4444);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
+        /* Severity colors */
+        .severity-critical { --color: #dc2626; }
+        .severity-high { --color: #ea580c; }
+        .severity-medium { --color: #d97706; }
+        .severity-low { --color: #16a34a; }
+        .severity-none { --color: #6b7280; }
 
-        .severity-high .result-score {
-            background: linear-gradient(135deg, #ea580c, #f97316);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .severity-medium .result-score {
-            background: linear-gradient(135deg, #d97706, #f59e0b);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .severity-low .result-score {
-            background: linear-gradient(135deg, #16a34a, #22c55e);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
+        .severity-critical .result-score,
+        .severity-high .result-score,
+        .severity-medium .result-score,
+        .severity-low .result-score,
         .severity-none .result-score {
-            background: linear-gradient(135deg, #6b7280, #9ca3af);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            color: var(--color);
         }
 
-        /* Header severity indication */
-        .header.severity-critical { background: linear-gradient(135deg, #7f1d1d 0%, #991b1b 100%); }
-        .header.severity-high { background: linear-gradient(135deg, #9a3412 0%, #c2410c 100%); }
-        .header.severity-medium { background: linear-gradient(135deg, #a16207 0%, #ca8a04 100%); }
-        .header.severity-low { background: linear-gradient(135deg, #15803d 0%, #16a34a 100%); }
-        .header.severity-none { background: linear-gradient(135deg, #374151 0%, #4b5563 100%); }
+        .severity-critical .header,
+        .severity-high .header,
+        .severity-medium .header,
+        .severity-low .header {
+            background: var(--color);
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+        }
+
+        .modal-content {
+            background-color: white;
+            margin: 5% auto;
+            padding: 30px;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 600px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close:hover {
+            color: #333;
+        }
+
+        .mysql-scenario {
+            background: var(--light-color);
+            border-left: 4px solid var(--primary-color);
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 20px;
+            border-radius: 8px;
+            color: white;
+            z-index: 1500;
+            animation: slideIn 0.3s ease;
+        }
+
+        .notification-success { background: var(--success-color); }
+        .notification-info { background: var(--primary-color); }
+
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
 
         .tooltip {
             position: relative;
@@ -316,72 +333,11 @@
             opacity: 0;
             pointer-events: none;
             transition: opacity 0.2s;
-            z-index: 1000;
+            z-index: 100;
         }
 
         .tooltip:hover::after {
             opacity: 1;
-        }
-
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 2000;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0,0,0,0.5);
-            backdrop-filter: blur(5px);
-        }
-
-        .modal-content {
-            background-color: white;
-            margin: 5% auto;
-            padding: 30px;
-            border-radius: 15px;
-            width: 90%;
-            max-width: 600px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-        }
-
-        .close {
-            color: #aaa;
-            float: right;
-            font-size: 28px;
-            font-weight: bold;
-            cursor: pointer;
-        }
-
-        .close:hover {
-            color: #333;
-        }
-
-        .mysql-scenario {
-            background: #f8fafc;
-            border-left: 4px solid #3b82f6;
-            padding: 20px;
-            margin: 15px 0;
-            border-radius: 0 8px 8px 0;
-        }
-
-        .notification {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            padding: 15px 20px;
-            border-radius: 8px;
-            color: white;
-            z-index: 3000;
-            animation: slideIn 0.3s ease;
-        }
-
-        .notification-success { background: #10b981; }
-        .notification-info { background: #3b82f6; }
-
-        @keyframes slideIn {
-            from { transform: translateX(100%); opacity: 0; }
-            to { transform: translateX(0); opacity: 1; }
         }
 
         @media (max-width: 768px) {
@@ -558,187 +514,172 @@
         </div>
     </div>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.21/lodash.min.js"></script>
     <script>
-        // Metric values
-        const metricValues = {
-            av: { network: 0.85, adjacent: 0.62, local: 0.55, physical: 0.20 },
-            ac: { low: 0.77, high: 0.44 },
-            pr: { 
-                none: 0.85,
-                low: { unchanged: 0.62, changed: 0.68 },
-                high: { unchanged: 0.27, changed: 0.50 }
-            },
-            ui: { none: 0.85, required: 0.62 },
-            conf: { none: 0.00, low: 0.22, high: 0.56 },
-            integ: { none: 0.00, low: 0.22, high: 0.56 },
-            avail: { none: 0.00, low: 0.22, high: 0.56 }
-        };
+        // Use IIFE to avoid global scope pollution
+        (function() {
+            'use strict';
 
-        // Current selections
-        let selections = {
-            av: 'network',
-            ac: 'low',
-            pr: 'low',
-            ui: 'none',
-            scope: 'unchanged',
-            conf: 'high',
-            integ: 'none',
-            avail: 'none'
-        };
+            // Metric values configuration
+            const METRIC_VALUES = {
+                av: { network: 0.85, adjacent: 0.62, local: 0.55, physical: 0.20 },
+                ac: { low: 0.77, high: 0.44 },
+                pr: { 
+                    none: 0.85,
+                    low: { unchanged: 0.62, changed: 0.68 },
+                    high: { unchanged: 0.27, changed: 0.50 }
+                },
+                ui: { none: 0.85, required: 0.62 },
+                conf: { none: 0.00, low: 0.22, high: 0.56 },
+                integ: { none: 0.00, low: 0.22, high: 0.56 },
+                avail: { none: 0.00, low: 0.22, high: 0.56 }
+            };
 
-        function selectMetric(button) {
-            const metric = button.dataset.metric;
-            const value = button.dataset.value;
-            
-            // Remove active class from siblings
-            const siblings = button.parentElement.querySelectorAll('.metric-btn');
-            siblings.forEach(btn => btn.classList.remove('active'));
-            
-            // Add active class to clicked button
-            button.classList.add('active');
-            
-            // Update selection
-            selections[metric] = value;
-            
-            // Recalculate scores
-            calculateScores();
-        }
+            // Current selections state
+            let currentSelections = {
+                av: 'network',
+                ac: 'low',
+                pr: 'low',
+                ui: 'none',
+                scope: 'unchanged',
+                conf: 'high',
+                integ: 'none',
+                avail: 'none'
+            };
 
-        function calculateScores() {
-            // Calculate Exploitability
-            const av = metricValues.av[selections.av];
-            const ac = metricValues.ac[selections.ac];
-            const ui = metricValues.ui[selections.ui];
-            
-            let pr;
-            if (selections.pr === 'none') {
-                pr = metricValues.pr.none;
-            } else {
-                pr = metricValues.pr[selections.pr][selections.scope];
+            // Cache DOM elements
+            const elements = {};
+
+            function cacheElements() {
+                elements.exploitabilityScore = document.getElementById('exploitabilityScore');
+                elements.impactScore = document.getElementById('impactScore');
+                elements.baseScore = document.getElementById('baseScore');
+                elements.mainHeader = document.getElementById('mainHeader');
+                elements.exploitabilityCard = document.getElementById('exploitabilityCard');
+                elements.impactCard = document.getElementById('impactCard');
+                elements.baseCard = document.getElementById('baseCard');
+                elements.modal = document.getElementById('mysqlModal');
             }
-            
-            const exploitability = 8.22 * av * ac * pr * ui;
-            
-            // Calculate Impact
-            const c = metricValues.conf[selections.conf];
-            const i = metricValues.integ[selections.integ];
-            const a = metricValues.avail[selections.avail];
-            
-            const iss = 1 - (1 - c) * (1 - i) * (1 - a);
-            let impact;
-            
-            if (selections.scope === 'unchanged') {
-                impact = 6.42 * iss;
-            } else {
-                impact = 7.52 * (iss - 0.029) - 3.25 * Math.pow(iss - 0.02, 15);
-            }
-            
-            // Calculate Base Score
-            let baseScore;
-            if (impact <= 0) {
-                baseScore = 0;
-            } else {
-                if (selections.scope === 'unchanged') {
-                    baseScore = Math.min(exploitability + impact, 10);
-                } else {
-                    baseScore = Math.min(1.08 * (exploitability + impact), 10);
-                }
-            }
-            
-            // Round up to 1 decimal place (CVSS rounding rule)
-            baseScore = Math.ceil(baseScore * 10) / 10;
-            
-            // Update display
-            document.getElementById('exploitabilityScore').textContent = exploitability.toFixed(2);
-            document.getElementById('impactScore').textContent = impact.toFixed(2);
-            document.getElementById('baseScore').textContent = baseScore.toFixed(1);
-            
-            // Update severity coloring
-            updateSeverityColors(baseScore);
-        }
 
-        function updateSeverityColors(baseScore) {
-            const header = document.getElementById('mainHeader');
-            const exploitabilityCard = document.getElementById('exploitabilityCard');
-            const impactCard = document.getElementById('impactCard');
-            const baseCard = document.getElementById('baseCard');
-            
-            // Clear existing severity classes
-            const severityClasses = ['severity-none', 'severity-low', 'severity-medium', 'severity-high', 'severity-critical'];
-            [header, exploitabilityCard, impactCard, baseCard].forEach(element => {
-                severityClasses.forEach(cls => element.classList.remove(cls));
-            });
-            
-            // Determine severity based on base score
-            let severityClass;
-            if (baseScore === 0) {
-                severityClass = 'severity-none';
-            } else if (baseScore <= 3.9) {
-                severityClass = 'severity-low';
-            } else if (baseScore <= 6.9) {
-                severityClass = 'severity-medium';
-            } else if (baseScore <= 8.9) {
-                severityClass = 'severity-high';
-            } else {
-                severityClass = 'severity-critical';
-            }
-            
-            // Apply severity coloring
-            header.classList.add(severityClass);
-            exploitabilityCard.classList.add(severityClass);
-            impactCard.classList.add(severityClass);
-            baseCard.classList.add(severityClass);
-        }
-
-        function showNotification(message, type = 'info') {
-            // Remove existing notifications
-            const existing = document.querySelectorAll('.notification');
-            existing.forEach(n => n.remove());
-
-            // Create notification
-            const notification = document.createElement('div');
-            notification.className = `notification notification-${type}`;
-            notification.innerHTML = `
-                <span>${message}</span>
-                <button style="background:none;border:none;color:white;margin-left:10px;cursor:pointer;" onclick="this.parentElement.remove()">&times;</button>
-            `;
-            
-            document.body.appendChild(notification);
-            
-            // Auto-remove after 3 seconds
-            setTimeout(() => {
-                if (notification.parentElement) {
-                    notification.remove();
-                }
-            }, 3000);
-        }
-
-        // Initialize event listeners
-        document.addEventListener('DOMContentLoaded', function() {
-            // Metric button event listeners
-            const metricButtons = document.querySelectorAll('.metric-btn');
-            metricButtons.forEach(button => {
-                button.addEventListener('click', function() {
-                    selectMetric(this);
-                });
-            });
-
-            // MySQL scenario button
-            document.getElementById('mysqlBtn').addEventListener('click', function() {
-                document.getElementById('mysqlModal').style.display = 'block';
-            });
-
-            // Close modal button
-            document.getElementById('closeBtn').addEventListener('click', function() {
-                document.getElementById('mysqlModal').style.display = 'none';
-            });
-
-            // Apply MySQL scenario button
-            document.getElementById('applyBtn').addEventListener('click', function() {
-                // Reset all selections first
-                document.querySelectorAll('.metric-btn.active').forEach(btn => btn.classList.remove('active'));
+            function selectMetric(button) {
+                const metric = button.dataset.metric;
+                const value = button.dataset.value;
                 
-                // Apply MySQL scenario settings
+                // Update UI
+                const siblings = button.parentElement.querySelectorAll('.metric-btn');
+                siblings.forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
+                
+                // Update state
+                currentSelections[metric] = value;
+                
+                // Recalculate scores (debounced)
+                debouncedCalculate();
+            }
+
+            function calculateScores() {
+                // Calculate Exploitability
+                const av = METRIC_VALUES.av[currentSelections.av];
+                const ac = METRIC_VALUES.ac[currentSelections.ac];
+                const ui = METRIC_VALUES.ui[currentSelections.ui];
+                
+                let pr;
+                if (currentSelections.pr === 'none') {
+                    pr = METRIC_VALUES.pr.none;
+                } else {
+                    pr = METRIC_VALUES.pr[currentSelections.pr][currentSelections.scope];
+                }
+                
+                const exploitability = 8.22 * av * ac * pr * ui;
+                
+                // Calculate Impact
+                const c = METRIC_VALUES.conf[currentSelections.conf];
+                const i = METRIC_VALUES.integ[currentSelections.integ];
+                const a = METRIC_VALUES.avail[currentSelections.avail];
+                
+                const iss = 1 - (1 - c) * (1 - i) * (1 - a);
+                let impact;
+                
+                if (currentSelections.scope === 'unchanged') {
+                    impact = 6.42 * iss;
+                } else {
+                    impact = 7.52 * (iss - 0.029) - 3.25 * Math.pow(iss - 0.02, 15);
+                }
+                
+                // Calculate Base Score
+                let baseScore;
+                if (impact <= 0) {
+                    baseScore = 0;
+                } else {
+                    if (currentSelections.scope === 'unchanged') {
+                        baseScore = Math.min(exploitability + impact, 10);
+                    } else {
+                        baseScore = Math.min(1.08 * (exploitability + impact), 10);
+                    }
+                }
+                
+                // Round up to 1 decimal place (CVSS rounding rule)
+                baseScore = Math.ceil(baseScore * 10) / 10;
+                
+                return { exploitability, impact, baseScore };
+            }
+
+            function updateDisplay(scores) {
+                elements.exploitabilityScore.textContent = scores.exploitability.toFixed(2);
+                elements.impactScore.textContent = scores.impact.toFixed(2);
+                elements.baseScore.textContent = scores.baseScore.toFixed(1);
+                
+                updateSeverityColors(scores.baseScore);
+            }
+
+            function updateSeverityColors(baseScore) {
+                const severityClasses = ['severity-none', 'severity-low', 'severity-medium', 'severity-high', 'severity-critical'];
+                const cards = [elements.mainHeader, elements.exploitabilityCard, elements.impactCard, elements.baseCard];
+                
+                // Clear existing classes
+                cards.forEach(element => {
+                    severityClasses.forEach(cls => element.classList.remove(cls));
+                });
+                
+                // Determine severity
+                let severityClass;
+                if (baseScore === 0) {
+                    severityClass = 'severity-none';
+                } else if (baseScore <= 3.9) {
+                    severityClass = 'severity-low';
+                } else if (baseScore <= 6.9) {
+                    severityClass = 'severity-medium';
+                } else if (baseScore <= 8.9) {
+                    severityClass = 'severity-high';
+                } else {
+                    severityClass = 'severity-critical';
+                }
+                
+                // Apply severity class
+                cards.forEach(element => element.classList.add(severityClass));
+            }
+
+            function showNotification(message, type = 'info') {
+                // Remove existing notifications
+                document.querySelectorAll('.notification').forEach(n => n.remove());
+
+                const notification = document.createElement('div');
+                notification.className = `notification notification-${type}`;
+                notification.innerHTML = `
+                    <span>${message}</span>
+                    <button style="background:none;border:none;color:white;margin-left:10px;cursor:pointer;" onclick="this.parentElement.remove()">&times;</button>
+                `;
+                
+                document.body.appendChild(notification);
+                
+                setTimeout(() => {
+                    if (notification.parentElement) {
+                        notification.remove();
+                    }
+                }, 3000);
+            }
+
+            function applyMySQLScenario() {
                 const mysqlSettings = {
                     av: 'network',
                     ac: 'low',
@@ -750,41 +691,85 @@
                     avail: 'none'
                 };
                 
-                // Update selections and UI
-                Object.keys(mysqlSettings).forEach(metric => {
-                    selections[metric] = mysqlSettings[metric];
-                    const button = document.querySelector(`[data-metric="${metric}"][data-value="${mysqlSettings[metric]}"]`);
+                // Reset UI
+                document.querySelectorAll('.metric-btn.active').forEach(btn => btn.classList.remove('active'));
+                
+                // Apply settings
+                Object.entries(mysqlSettings).forEach(([metric, value]) => {
+                    currentSelections[metric] = value;
+                    const button = document.querySelector(`[data-metric="${metric}"][data-value="${value}"]`);
                     if (button) {
                         button.classList.add('active');
                     }
                 });
                 
-                // Recalculate scores
-                calculateScores();
+                // Recalculate and update display
+                const scores = calculateScores();
+                updateDisplay(scores);
                 
-                // Close modal
-                document.getElementById('mysqlModal').style.display = 'none';
-                
-                // Show success message
+                // Close modal and show notification
+                elements.modal.style.display = 'none';
                 showNotification('MySQL scenario applied successfully!', 'success');
-            });
+            }
 
-            // NVD reference button
-            document.getElementById('nvdBtn').addEventListener('click', function() {
-                window.open('https://nvd.nist.gov/vuln-metrics/cvss/v3-calculator', '_blank');
-            });
+            // Debounced calculation for better performance
+            const debouncedCalculate = _.debounce(() => {
+                const scores = calculateScores();
+                updateDisplay(scores);
+            }, 50);
 
-            // Close modal when clicking outside
-            window.addEventListener('click', function(event) {
-                const modal = document.getElementById('mysqlModal');
-                if (event.target === modal) {
-                    modal.style.display = 'none';
-                }
-            });
+            // Event listeners setup
+            function setupEventListeners() {
+                // Metric buttons
+                document.addEventListener('click', function(e) {
+                    if (e.target.classList.contains('metric-btn')) {
+                        selectMetric(e.target);
+                    }
+                });
 
-            // Initial calculation
-            calculateScores();
-        });
+                // MySQL scenario button
+                document.getElementById('mysqlBtn').addEventListener('click', () => {
+                    elements.modal.style.display = 'block';
+                });
+
+                // Close modal
+                document.getElementById('closeBtn').addEventListener('click', () => {
+                    elements.modal.style.display = 'none';
+                });
+
+                // Apply MySQL scenario
+                document.getElementById('applyBtn').addEventListener('click', applyMySQLScenario);
+
+                // NVD reference
+                document.getElementById('nvdBtn').addEventListener('click', () => {
+                    window.open('https://nvd.nist.gov/vuln-metrics/cvss/v3-calculator', '_blank');
+                });
+
+                // Close modal when clicking outside
+                window.addEventListener('click', (e) => {
+                    if (e.target === elements.modal) {
+                        elements.modal.style.display = 'none';
+                    }
+                });
+            }
+
+            // Initialize application
+            function init() {
+                cacheElements();
+                setupEventListeners();
+                
+                // Initial calculation
+                const scores = calculateScores();
+                updateDisplay(scores);
+            }
+
+            // Start when DOM is ready
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', init);
+            } else {
+                init();
+            }
+        })();
     </script>
 </body>
 </html>
