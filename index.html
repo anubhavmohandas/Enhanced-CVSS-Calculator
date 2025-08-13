@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Enhanced CVSS Exploitability Calculator</title>
+    <title>CVSS v3.1 Risk Calculator – Exploitability (Blue Team)</title>
     <style>
         * {
             margin: 0;
@@ -12,340 +12,212 @@
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #0f0f23 0%, #1a1a3e 50%, #2d2d5f 100%);
-            min-height: 100vh;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f5f7fa;
+            color: #374151;
+            line-height: 1.6;
             padding: 20px;
-            color: #ffffff;
         }
 
         .container {
-            max-width: 1400px;
+            max-width: 1200px;
             margin: 0 auto;
-            background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            border: 1px solid rgba(255,255,255,0.2);
-            box-shadow: 0 30px 60px rgba(0,0,0,0.3);
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
             overflow: hidden;
         }
 
         .header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            padding: 40px 30px;
-            text-align: center;
-            position: relative;
+            background: #1f2937;
+            color: white;
+            padding: 30px;
+            text-align: left;
         }
 
         .header h1 {
-            font-size: 2.8em;
-            margin-bottom: 15px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 20px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            font-size: 2.25rem;
+            font-weight: 700;
+            margin-bottom: 10px;
         }
 
         .header p {
-            font-size: 1.2em;
-            opacity: 0.95;
-            max-width: 700px;
-            margin: 0 auto;
-            line-height: 1.6;
+            font-size: 1.1rem;
+            opacity: 0.9;
+            color: #d1d5db;
         }
 
         .content {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 40px;
             padding: 40px;
         }
 
-        .section {
-            background: linear-gradient(135deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.04) 100%);
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .metric-section {
+            background: #f9fafb;
             padding: 30px;
-            border-radius: 15px;
-            border: 1px solid rgba(255,255,255,0.1);
-            backdrop-filter: blur(5px);
-            transition: transform 0.3s ease;
+            border-radius: 8px;
+            border: 1px solid #e5e7eb;
         }
 
-        .section:hover {
-            transform: translateY(-2px);
-        }
-
-        .section h2 {
-            color: #ffffff;
+        .metric-section h2 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #1f2937;
             margin-bottom: 30px;
-            font-size: 1.6em;
-            border-bottom: 3px solid #667eea;
-            padding-bottom: 15px;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+            padding-bottom: 10px;
+            border-bottom: 2px solid #e5e7eb;
         }
 
         .metric-group {
-            margin-bottom: 25px;
+            margin-bottom: 30px;
         }
 
-        .metric-group label {
-            display: block;
+        .metric-label {
             font-weight: 600;
-            color: #e2e8f0;
-            margin-bottom: 10px;
-            font-size: 1em;
+            color: #374151;
+            margin-bottom: 12px;
+            font-size: 1.1rem;
         }
 
-        .metric-group select {
-            width: 100%;
-            padding: 15px;
-            border: 2px solid rgba(255,255,255,0.2);
-            border-radius: 10px;
-            font-size: 1em;
-            background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%);
-            color: #ffffff;
-            backdrop-filter: blur(5px);
+        .button-group {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .metric-btn {
+            padding: 10px 16px;
+            border: 2px solid #d1d5db;
+            background: white;
+            color: #6b7280;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            font-size: 0.95rem;
+        }
+
+        .metric-btn:hover {
+            border-color: #3b82f6;
+            color: #3b82f6;
+        }
+
+        .metric-btn.active {
+            background: #1e293b;
+            color: white;
+            border-color: #1e293b;
+        }
+
+        .results-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .result-card {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 25px;
+            text-align: left;
+        }
+
+        .result-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 15px;
+        }
+
+        .result-score {
+            font-size: 3rem;
+            font-weight: 700;
+            color: #1f2937;
+            margin-bottom: 10px;
+        }
+
+        .result-formula {
+            font-size: 0.9rem;
+            color: #6b7280;
+            font-family: 'Courier New', monospace;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .action-btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
             transition: all 0.2s ease;
         }
 
-        .metric-group select:focus {
-            border-color: #667eea;
-            outline: none;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.3);
-        }
-
-        .metric-group select:hover {
-            border-color: #667eea;
-        }
-
-        .metric-group select option {
-            background: #1a1a3e;
-            color: #ffffff;
-            padding: 10px;
-        }
-
-        .formula-box {
-            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        .btn-primary {
+            background: #1e293b;
             color: white;
-            padding: 25px;
-            border-radius: 12px;
-            margin-bottom: 25px;
-            box-shadow: 0 10px 25px rgba(240, 147, 251, 0.3);
         }
 
-        .formula-box h3 {
-            margin-bottom: 15px;
-            font-size: 1.3em;
+        .btn-primary:hover {
+            background: #334155;
         }
 
-        .formula-box code {
-            background: rgba(255,255,255,0.15);
-            padding: 12px 16px;
-            border-radius: 8px;
-            font-family: 'Courier New', monospace;
-            font-size: 1.1em;
-            display: block;
-            border: 1px solid rgba(255,255,255,0.2);
+        .btn-secondary {
+            background: white;
+            color: #374151;
+            border: 1px solid #d1d5db;
         }
 
-        .calculation-box {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 25px;
-            border-radius: 12px;
-            margin-bottom: 25px;
-            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+        .btn-secondary:hover {
+            background: #f9fafb;
         }
 
-        .calculation-box h3 {
-            margin-bottom: 15px;
-            font-size: 1.3em;
+        .notes {
+            background: #f0f9ff;
+            border: 1px solid #bae6fd;
+            border-radius: 6px;
+            padding: 20px;
+            font-size: 0.9rem;
+            color: #075985;
         }
 
-        .calculation-box code {
-            background: rgba(255,255,255,0.15);
-            padding: 12px 16px;
-            border-radius: 8px;
-            font-family: 'Courier New', monospace;
-            font-size: 1em;
-            display: block;
-            word-break: break-all;
-            border: 1px solid rgba(255,255,255,0.2);
-        }
-
-        .score-display {
-            padding: 35px;
-            border-radius: 15px;
-            margin-bottom: 25px;
-            text-align: center;
-            border: 3px solid;
-            transition: all 0.3s ease;
-        }
-
-        .score-display h3 {
-            margin-bottom: 20px;
-            font-size: 1.4em;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-        }
-
-        .score-display .score {
-            font-size: 3.5em;
-            font-weight: bold;
-            margin-bottom: 20px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-        }
-
-        .score-display .risk-level {
-            font-size: 1.2em;
+        .notes strong {
             font-weight: 600;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-        }
-
-        .risk-critical {
-            background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
-            color: #ffffff;
-            border-color: #fca5a5;
-            box-shadow: 0 0 20px rgba(220, 38, 38, 0.4);
-        }
-
-        .risk-high {
-            background: linear-gradient(135deg, #ea580c 0%, #c2410c 100%);
-            color: #ffffff;
-            border-color: #fdba74;
-            box-shadow: 0 0 20px rgba(234, 88, 12, 0.4);
-        }
-
-        .risk-medium {
-            background: linear-gradient(135deg, #d97706 0%, #b45309 100%);
-            color: #ffffff;
-            border-color: #fcd34d;
-            box-shadow: 0 0 20px rgba(217, 119, 6, 0.4);
-        }
-
-        .risk-low {
-            background: linear-gradient(135deg, #16a34a 0%, #15803d 100%);
-            color: #ffffff;
-            border-color: #86efac;
-            box-shadow: 0 0 20px rgba(22, 163, 74, 0.4);
-        }
-
-        .risk-none {
-            background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%);
-            color: #94a3b8;
-            border-color: rgba(255,255,255,0.2);
-        }
-
-        .guidelines {
-            background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%);
-            padding: 25px;
-            border-radius: 12px;
-            border: 1px solid rgba(255,255,255,0.2);
-            backdrop-filter: blur(5px);
-        }
-
-        .guidelines h3 {
-            color: #ffffff;
-            margin-bottom: 20px;
-            font-size: 1.3em;
-        }
-
-        .guideline-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 12px 0;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-        }
-
-        .guideline-item:last-child {
-            border-bottom: none;
-        }
-
-        .reset-btn {
-            width: 100%;
-            padding: 18px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border: none;
-            border-radius: 12px;
-            font-size: 1.2em;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            margin-top: 25px;
-        }
-
-        .reset-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
-        }
-
-        .assessment-box {
-            background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
-            color: #ffffff;
-            padding: 25px;
-            border-radius: 12px;
-            margin-top: 25px;
-            border-left: 5px solid #f97316;
-            box-shadow: 0 10px 25px rgba(251, 191, 36, 0.3);
-        }
-
-        .assessment-box h3 {
-            margin-bottom: 15px;
-            font-weight: 600;
-            font-size: 1.3em;
-        }
-
-        .assessment-box p {
-            line-height: 1.6;
-        }
-
-        .shield-icon, .calculator-icon, .warning-icon {
-            width: 28px;
-            height: 28px;
-            filter: drop-shadow(1px 1px 2px rgba(0,0,0,0.3));
-        }
-
-        .version-info {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background: rgba(0,0,0,0.7);
-            color: #ffffff;
-            padding: 10px 15px;
-            border-radius: 20px;
-            font-size: 0.9em;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255,255,255,0.2);
         }
 
         @media (max-width: 768px) {
-            .content {
+            .metrics-grid {
                 grid-template-columns: 1fr;
                 gap: 20px;
-                padding: 20px;
             }
             
-            .header h1 {
-                font-size: 2.2em;
-                flex-direction: column;
-                gap: 15px;
-            }
-            
-            .score-display .score {
-                font-size: 3em;
+            .results-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
             }
 
-            .version-info {
-                position: static;
-                margin-top: 20px;
-                text-align: center;
+            .button-group {
+                flex-direction: column;
+            }
+
+            .metric-btn {
+                width: 100%;
+                text-align: left;
+            }
+
+            .action-buttons {
+                flex-direction: column;
             }
         }
 
@@ -364,7 +236,7 @@
             color: white;
             padding: 8px 12px;
             border-radius: 6px;
-            font-size: 0.9em;
+            font-size: 0.85rem;
             white-space: nowrap;
             opacity: 0;
             pointer-events: none;
@@ -380,269 +252,223 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>
-                <svg class="shield-icon" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/>
-                </svg>
-                Enhanced CVSS Exploitability Calculator
-            </h1>
-            <p>Calculate the exploitability component of CVSS Base Score with enhanced visual feedback and detailed risk assessment based on Attack Vector, Attack Complexity, Privileges Required, and User Interaction metrics.</p>
+            <h1>CVSS v3.1 Risk Calculator – Exploitability (Blue Team)</h1>
+            <p>Select base metrics to compute Exploitability. Full Base score is also computed from the same selections (optional). Hover buttons to see numeric constants.</p>
         </div>
 
         <div class="content">
-            <!-- Input Section -->
-            <div class="section">
-                <h2>Base Metrics Configuration</h2>
-                
-                <div class="metric-group">
-                    <label for="attackVector" class="tooltip" data-tooltip="How the vulnerability can be exploited">Attack Vector (AV)</label>
-                    <select id="attackVector" onchange="calculateExploitability()">
-                        <option value="">Select Attack Vector</option>
-                        <option value="network">Network (N) - 0.85 - Exploitable remotely</option>
-                        <option value="adjacent">Adjacent (A) - 0.62 - Same network segment</option>
-                        <option value="local">Local (L) - 0.55 - Local system access required</option>
-                        <option value="physical">Physical (P) - 0.20 - Physical access required</option>
-                    </select>
+            <div class="metrics-grid">
+                <!-- Base Metrics (Exploitability) -->
+                <div class="metric-section">
+                    <h2>Base Metrics (Exploitability)</h2>
+                    
+                    <div class="metric-group">
+                        <div class="metric-label">Attack Vector (AV)</div>
+                        <div class="button-group">
+                            <button class="metric-btn tooltip active" data-tooltip="0.85" data-metric="av" data-value="network" onclick="selectMetric(this)">Network (N)</button>
+                            <button class="metric-btn tooltip" data-tooltip="0.62" data-metric="av" data-value="adjacent" onclick="selectMetric(this)">Adjacent (A)</button>
+                            <button class="metric-btn tooltip" data-tooltip="0.55" data-metric="av" data-value="local" onclick="selectMetric(this)">Local (L)</button>
+                            <button class="metric-btn tooltip" data-tooltip="0.20" data-metric="av" data-value="physical" onclick="selectMetric(this)">Physical (P)</button>
+                        </div>
+                    </div>
+
+                    <div class="metric-group">
+                        <div class="metric-label">Attack Complexity (AC)</div>
+                        <div class="button-group">
+                            <button class="metric-btn tooltip active" data-tooltip="0.77" data-metric="ac" data-value="low" onclick="selectMetric(this)">Low (L)</button>
+                            <button class="metric-btn tooltip" data-tooltip="0.44" data-metric="ac" data-value="high" onclick="selectMetric(this)">High (H)</button>
+                        </div>
+                    </div>
+
+                    <div class="metric-group">
+                        <div class="metric-label">Privileges Required (PR)</div>
+                        <div class="button-group">
+                            <button class="metric-btn tooltip" data-tooltip="0.85" data-metric="pr" data-value="none" onclick="selectMetric(this)">None (N)</button>
+                            <button class="metric-btn tooltip active" data-tooltip="0.62/0.68" data-metric="pr" data-value="low" onclick="selectMetric(this)">Low (L)</button>
+                            <button class="metric-btn tooltip" data-tooltip="0.27/0.50" data-metric="pr" data-value="high" onclick="selectMetric(this)">High (H)</button>
+                        </div>
+                    </div>
+
+                    <div class="metric-group">
+                        <div class="metric-label">User Interaction (UI)</div>
+                        <div class="button-group">
+                            <button class="metric-btn tooltip active" data-tooltip="0.85" data-metric="ui" data-value="none" onclick="selectMetric(this)">None (N)</button>
+                            <button class="metric-btn tooltip" data-tooltip="0.62" data-metric="ui" data-value="required" onclick="selectMetric(this)">Required (R)</button>
+                        </div>
+                    </div>
                 </div>
 
-                <div class="metric-group">
-                    <label for="attackComplexity" class="tooltip" data-tooltip="Conditions beyond attacker's control that must exist">Attack Complexity (AC)</label>
-                    <select id="attackComplexity" onchange="calculateExploitability()">
-                        <option value="">Select Attack Complexity</option>
-                        <option value="low">Low (L) - 0.77 - No special conditions</option>
-                        <option value="high">High (H) - 0.44 - Special conditions required</option>
-                    </select>
-                </div>
+                <!-- Scope & Impact Metrics -->
+                <div class="metric-section">
+                    <h2>Scope & Impact Metrics (for full Base)</h2>
+                    
+                    <div class="metric-group">
+                        <div class="metric-label">Scope (S)</div>
+                        <div class="button-group">
+                            <button class="metric-btn tooltip active" data-tooltip="Unchanged" data-metric="scope" data-value="unchanged" onclick="selectMetric(this)">Unchanged (U)</button>
+                            <button class="metric-btn tooltip" data-tooltip="Changed" data-metric="scope" data-value="changed" onclick="selectMetric(this)">Changed (C)</button>
+                        </div>
+                    </div>
 
-                <div class="metric-group">
-                    <label for="scope" class="tooltip" data-tooltip="Whether exploitation affects components beyond the vulnerable one">Scope (S) - affects PR calculation</label>
-                    <select id="scope" onchange="updatePrivilegesRequiredOptions()">
-                        <option value="unchanged">Unchanged (U) - Same authorization scope</option>
-                        <option value="changed">Changed (C) - Different authorization scope</option>
-                    </select>
-                </div>
+                    <div class="metric-group">
+                        <div class="metric-label">Confidentiality (C)</div>
+                        <div class="button-group">
+                            <button class="metric-btn tooltip" data-tooltip="0.00" data-metric="conf" data-value="none" onclick="selectMetric(this)">None (N)</button>
+                            <button class="metric-btn tooltip" data-tooltip="0.22" data-metric="conf" data-value="low" onclick="selectMetric(this)">Low (L)</button>
+                            <button class="metric-btn tooltip active" data-tooltip="0.56" data-metric="conf" data-value="high" onclick="selectMetric(this)">High (H)</button>
+                        </div>
+                    </div>
 
-                <div class="metric-group">
-                    <label for="privilegesRequired" class="tooltip" data-tooltip="Level of privileges attacker must possess">Privileges Required (PR)</label>
-                    <select id="privilegesRequired" onchange="calculateExploitability()">
-                        <option value="">Select Privileges Required</option>
-                        <option value="none">None (N) - 0.85 - No privileges needed</option>
-                        <option value="low" data-unchanged="0.62" data-changed="0.68">Low (L) - 0.62 - Basic user privileges</option>
-                        <option value="high" data-unchanged="0.27" data-changed="0.50">High (H) - 0.27 - Administrative privileges</option>
-                    </select>
-                </div>
+                    <div class="metric-group">
+                        <div class="metric-label">Integrity (I)</div>
+                        <div class="button-group">
+                            <button class="metric-btn tooltip active" data-tooltip="0.00" data-metric="integ" data-value="none" onclick="selectMetric(this)">None (N)</button>
+                            <button class="metric-btn tooltip" data-tooltip="0.22" data-metric="integ" data-value="low" onclick="selectMetric(this)">Low (L)</button>
+                            <button class="metric-btn tooltip" data-tooltip="0.56" data-metric="integ" data-value="high" onclick="selectMetric(this)">High (H)</button>
+                        </div>
+                    </div>
 
-                <div class="metric-group">
-                    <label for="userInteraction" class="tooltip" data-tooltip="Whether exploitation requires user participation">User Interaction (UI)</label>
-                    <select id="userInteraction" onchange="calculateExploitability()">
-                        <option value="">Select User Interaction</option>
-                        <option value="none">None (N) - 0.85 - No user interaction needed</option>
-                        <option value="required">Required (R) - 0.62 - User must participate</option>
-                    </select>
+                    <div class="metric-group">
+                        <div class="metric-label">Availability (A)</div>
+                        <div class="button-group">
+                            <button class="metric-btn tooltip active" data-tooltip="0.00" data-metric="avail" data-value="none" onclick="selectMetric(this)">None (N)</button>
+                            <button class="metric-btn tooltip" data-tooltip="0.22" data-metric="avail" data-value="low" onclick="selectMetric(this)">Low (L)</button>
+                            <button class="metric-btn tooltip" data-tooltip="0.56" data-metric="avail" data-value="high" onclick="selectMetric(this)">High (H)</button>
+                        </div>
+                    </div>
                 </div>
-
-                <button class="reset-btn" onclick="resetCalculator()">🔄 Reset Calculator</button>
             </div>
 
-            <!-- Results Section -->
-            <div class="section">
-                <h2>Calculation Results & Analysis</h2>
+            <div class="results-grid">
+                <div class="result-card">
+                    <div class="result-title">Exploitability</div>
+                    <div class="result-score" id="exploitabilityScore">2.84</div>
+                    <div class="result-formula">8.22 × AV × AC × PR × UI</div>
+                </div>
                 
-                <div class="formula-box">
-                    <h3>📐 Exploitability Formula:</h3>
-                    <code>Exploitability = 8.22 × AV × AC × PR × UI</code>
+                <div class="result-card">
+                    <div class="result-title">Impact (optional)</div>
+                    <div class="result-score" id="impactScore">3.60</div>
+                    <div class="result-formula">ISS = 1 - (1-C)(1-I)(1-A)</div>
                 </div>
+                
+                <div class="result-card">
+                    <div class="result-title">Base Score (optional)</div>
+                    <div class="result-score" id="baseScore">6.5</div>
+                    <div class="result-formula">Rounded up to 1 decimal</div>
+                </div>
+            </div>
 
-                <div class="calculation-box">
-                    <h3>🧮 Current Calculation:</h3>
-                    <code id="calculationDisplay">Select all metrics to see calculation</code>
-                </div>
+            <div class="action-buttons">
+                <button class="action-btn btn-primary">Use MySQL scenario</button>
+                <button class="action-btn btn-secondary">NVD CVSS v3.1 Reference</button>
+            </div>
 
-                <div id="scoreDisplay" class="score-display risk-none">
-                    <h3>
-                        <svg class="calculator-icon" fill="currentColor" viewBox="0 0 24 24">
-                            <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-2h2v2zm0-4H7v-2h2v2zm0-4H7V7h2v2zm4 8h-2v-2h2v2zm0-4h-2v-2h2v2zm0-4h-2V7h2v2zm4 8h-2v-6h2v6zm0-8h-2V7h2v2z"/>
-                        </svg>
-                        Exploitability Score
-                    </h3>
-                    <div class="score" id="scoreValue">0.00</div>
-                    <div class="risk-level" id="riskLevel" style="display: none;">
-                        <svg class="warning-icon" fill="currentColor" viewBox="0 0 24 24">
-                            <path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/>
-                        </svg>
-                        <span id="riskText">Risk Level: None</span>
-                    </div>
-                </div>
-
-                <div class="guidelines">
-                    <h3>📊 Risk Level Guidelines:</h3>
-                    <div class="guideline-item">
-                        <span style="font-weight: 600; color: #dc2626;">🔴 Critical:</span>
-                        <span>≥ 6.0</span>
-                    </div>
-                    <div class="guideline-item">
-                        <span style="font-weight: 600; color: #ea580c;">🟠 High:</span>
-                        <span>4.0 - 5.9</span>
-                    </div>
-                    <div class="guideline-item">
-                        <span style="font-weight: 600; color: #d97706;">🟡 Medium:</span>
-                        <span>2.0 - 3.9</span>
-                    </div>
-                    <div class="guideline-item">
-                        <span style="font-weight: 600; color: #16a34a;">🟢 Low:</span>
-                        <span>< 2.0</span>
-                    </div>
-                </div>
-
-                <div id="assessmentBox" class="assessment-box" style="display: none;">
-                    <h3>⚠️ Risk Assessment:</h3>
-                    <p id="assessmentText"></p>
-                </div>
+            <div class="notes">
+                <strong>Notes:</strong> For PR, constants differ by Scope: Low = 0.62 (U) / 0.68 (C); High = 0.27 (U) / 0.50 (C). Rounding follows CVSS "round up" rule (ceil to 1 decimal).
             </div>
         </div>
     </div>
 
-    <div class="version-info">
-        Enhanced v2.0 | CVSS v3.1 Compatible
-    </div>
-
     <script>
-        // Metric values with improved precision
+        // Metric values
         const metricValues = {
-            attackVector: {
-                network: 0.85,
-                adjacent: 0.62,
-                local: 0.55,
-                physical: 0.2
-            },
-            attackComplexity: {
-                low: 0.77,
-                high: 0.44
-            },
-            privilegesRequired: {
+            av: { network: 0.85, adjacent: 0.62, local: 0.55, physical: 0.20 },
+            ac: { low: 0.77, high: 0.44 },
+            pr: { 
                 none: 0.85,
                 low: { unchanged: 0.62, changed: 0.68 },
-                high: { unchanged: 0.27, changed: 0.5 }
+                high: { unchanged: 0.27, changed: 0.50 }
             },
-            userInteraction: {
-                none: 0.85,
-                required: 0.62
-            }
+            ui: { none: 0.85, required: 0.62 },
+            conf: { none: 0.00, low: 0.22, high: 0.56 },
+            integ: { none: 0.00, low: 0.22, high: 0.56 },
+            avail: { none: 0.00, low: 0.22, high: 0.56 }
         };
 
-        // Assessment messages
-        const assessmentMessages = {
-            critical: 'This vulnerability has critical exploitability with maximum risk exposure. Immediate remediation is required. Deploy emergency patches and implement temporary mitigations immediately.',
-            high: 'This vulnerability has high exploitability and poses significant risk to your environment. Prioritize remediation within 24-48 hours and implement monitoring for exploitation attempts.',
-            medium: 'This vulnerability has medium exploitability requiring planned remediation. Schedule patching within the next maintenance window and monitor for unusual activity.',
-            low: 'This vulnerability has low exploitability with limited immediate risk. Include in regular patching cycles and maintain awareness of potential escalation vectors.'
+        // Current selections
+        let selections = {
+            av: 'network',
+            ac: 'low',
+            pr: 'low',
+            ui: 'none',
+            scope: 'unchanged',
+            conf: 'high',
+            integ: 'none',
+            avail: 'none'
         };
 
-        function updatePrivilegesRequiredOptions() {
-            const scope = document.getElementById('scope').value;
-            const prSelect = document.getElementById('privilegesRequired');
-            const lowOption = prSelect.querySelector('option[value="low"]');
-            const highOption = prSelect.querySelector('option[value="high"]');
+        function selectMetric(button) {
+            const metric = button.dataset.metric;
+            const value = button.dataset.value;
             
-            if (scope === 'changed') {
-                lowOption.textContent = 'Low (L) - 0.68 - Basic user privileges';
-                highOption.textContent = 'High (H) - 0.50 - Administrative privileges';
-            } else {
-                lowOption.textContent = 'Low (L) - 0.62 - Basic user privileges';
-                highOption.textContent = 'High (H) - 0.27 - Administrative privileges';
-            }
+            // Remove active class from siblings
+            const siblings = button.parentElement.querySelectorAll('.metric-btn');
+            siblings.forEach(btn => btn.classList.remove('active'));
             
-            calculateExploitability();
+            // Add active class to clicked button
+            button.classList.add('active');
+            
+            // Update selection
+            selections[metric] = value;
+            
+            // Recalculate scores
+            calculateScores();
         }
 
-        function calculateExploitability() {
-            const av = document.getElementById('attackVector').value;
-            const ac = document.getElementById('attackComplexity').value;
-            const pr = document.getElementById('privilegesRequired').value;
-            const ui = document.getElementById('userInteraction').value;
-            const scope = document.getElementById('scope').value;
-
-            if (!av || !ac || !pr || !ui) {
-                document.getElementById('scoreValue').textContent = '0.00';
-                document.getElementById('calculationDisplay').textContent = 'Select all metrics to see calculation';
-                document.getElementById('scoreDisplay').className = 'score-display risk-none';
-                document.getElementById('riskLevel').style.display = 'none';
-                document.getElementById('assessmentBox').style.display = 'none';
-                return;
-            }
-
-            const avValue = metricValues.attackVector[av];
-            const acValue = metricValues.attackComplexity[ac];
-            const uiValue = metricValues.userInteraction[ui];
+        function calculateScores() {
+            // Calculate Exploitability
+            const av = metricValues.av[selections.av];
+            const ac = metricValues.ac[selections.ac];
+            const ui = metricValues.ui[selections.ui];
             
-            let prValue;
-            if (pr === 'none') {
-                prValue = metricValues.privilegesRequired.none;
+            let pr;
+            if (selections.pr === 'none') {
+                pr = metricValues.pr.none;
             } else {
-                prValue = metricValues.privilegesRequired[pr][scope];
+                pr = metricValues.pr[selections.pr][selections.scope];
             }
-
-            // Exploitability calculation
-            const exploitability = parseFloat((8.22 * avValue * acValue * prValue * uiValue).toFixed(3));
-
-            // Update calculation display
-            const calculation = `8.22 × ${avValue.toFixed(2)} × ${acValue.toFixed(2)} × ${prValue.toFixed(2)} × ${uiValue.toFixed(2)} = ${exploitability.toFixed(2)}`;
-            document.getElementById('calculationDisplay').textContent = calculation;
-
-            // Update score
-            document.getElementById('scoreValue').textContent = exploitability.toFixed(2);
-
-            // Risk level determination
-            let riskLevel, riskClass, assessmentText;
-            if (exploitability >= 6.0) {
-                riskLevel = 'Critical';
-                riskClass = 'risk-critical';
-                assessmentText = assessmentMessages.critical;
-            } else if (exploitability >= 4.0) {
-                riskLevel = 'High';
-                riskClass = 'risk-high';
-                assessmentText = assessmentMessages.high;
-            } else if (exploitability >= 2.0) {
-                riskLevel = 'Medium';
-                riskClass = 'risk-medium';
-                assessmentText = assessmentMessages.medium;
-            } else {
-                riskLevel = 'Low';
-                riskClass = 'risk-low';
-                assessmentText = assessmentMessages.low;
-            }
-
-            // Update UI
-            document.getElementById('scoreDisplay').className = 'score-display ' + riskClass;
-            document.getElementById('riskLevel').style.display = 'flex';
-            document.getElementById('riskText').textContent = 'Risk Level: ' + riskLevel;
             
-            // Show assessment
-            document.getElementById('assessmentBox').style.display = 'block';
-            document.getElementById('assessmentText').textContent = assessmentText;
+            const exploitability = 8.22 * av * ac * pr * ui;
+            
+            // Calculate Impact
+            const c = metricValues.conf[selections.conf];
+            const i = metricValues.integ[selections.integ];
+            const a = metricValues.avail[selections.avail];
+            
+            const iss = 1 - (1 - c) * (1 - i) * (1 - a);
+            let impact;
+            
+            if (selections.scope === 'unchanged') {
+                impact = 6.42 * iss;
+            } else {
+                impact = 7.52 * (iss - 0.029) - 3.25 * Math.pow(iss - 0.02, 15);
+            }
+            
+            // Calculate Base Score
+            let baseScore;
+            if (impact <= 0) {
+                baseScore = 0;
+            } else {
+                if (selections.scope === 'unchanged') {
+                    baseScore = Math.min(exploitability + impact, 10);
+                } else {
+                    baseScore = Math.min(1.08 * (exploitability + impact), 10);
+                }
+            }
+            
+            // Round up to 1 decimal place (CVSS rounding rule)
+            baseScore = Math.ceil(baseScore * 10) / 10;
+            
+            // Update display
+            document.getElementById('exploitabilityScore').textContent = exploitability.toFixed(2);
+            document.getElementById('impactScore').textContent = impact.toFixed(2);
+            document.getElementById('baseScore').textContent = baseScore.toFixed(1);
         }
 
-        function resetCalculator() {
-            document.getElementById('attackVector').value = '';
-            document.getElementById('attackComplexity').value = '';
-            document.getElementById('scope').value = 'unchanged';
-            document.getElementById('privilegesRequired').value = '';
-            document.getElementById('userInteraction').value = '';
-            
-            // Reset display
-            document.getElementById('scoreValue').textContent = '0.00';
-            document.getElementById('calculationDisplay').textContent = 'Select all metrics to see calculation';
-            document.getElementById('scoreDisplay').className = 'score-display risk-none';
-            document.getElementById('riskLevel').style.display = 'none';
-            document.getElementById('assessmentBox').style.display = 'none';
-            
-            // Update PR options
-            updatePrivilegesRequiredOptions();
-        }
-
-        // Initialize on load
+        // Initialize calculations on load
         document.addEventListener('DOMContentLoaded', function() {
-            updatePrivilegesRequiredOptions();
+            calculateScores();
         });
     </script>
 </body>
