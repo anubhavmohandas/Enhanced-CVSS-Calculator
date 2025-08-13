@@ -36,26 +36,12 @@
             padding: 40px;
             text-align: left;
             position: relative;
-            overflow: hidden;
-        }
-
-        .header::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="0.5"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
-            opacity: 0.3;
         }
 
         .header h1 {
             font-size: 2.5rem;
             font-weight: 700;
             margin-bottom: 15px;
-            position: relative;
-            z-index: 1;
             text-shadow: 0 2px 4px rgba(0,0,0,0.3);
         }
 
@@ -63,8 +49,6 @@
             font-size: 1.1rem;
             opacity: 0.9;
             color: #d1d5db;
-            position: relative;
-            z-index: 1;
         }
 
         .content {
@@ -132,40 +116,28 @@
             border-radius: 8px;
             cursor: pointer;
             font-weight: 500;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: all 0.2s ease;
             font-size: 0.95rem;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .metric-btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-            transition: left 0.5s;
-        }
-
-        .metric-btn:hover::before {
-            left: 100%;
+            user-select: none;
         }
 
         .metric-btn:hover {
             border-color: #3b82f6;
             color: #3b82f6;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+            transform: translateY(-1px);
+            box-shadow: 0 2px 8px rgba(59, 130, 246, 0.2);
         }
 
         .metric-btn.active {
             background: linear-gradient(135deg, #1e293b, #334155);
             color: white;
             border-color: #1e293b;
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(30, 41, 59, 0.4);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(30, 41, 59, 0.3);
+        }
+
+        .metric-btn.active:hover {
+            background: linear-gradient(135deg, #334155, #475569);
         }
 
         .results-grid {
@@ -182,7 +154,7 @@
             padding: 30px;
             text-align: center;
             box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            transition: all 0.3s ease;
+            transition: transform 0.2s ease;
             position: relative;
             overflow: hidden;
         }
@@ -198,8 +170,7 @@
         }
 
         .result-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+            transform: translateY(-2px);
         }
 
         .result-title {
@@ -241,10 +212,8 @@
             border-radius: 10px;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: all 0.2s ease;
             font-size: 1rem;
-            position: relative;
-            overflow: hidden;
         }
 
         .btn-primary {
@@ -254,8 +223,8 @@
         }
 
         .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(59, 130, 246, 0.4);
+            transform: translateY(-1px);
+            box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
         }
 
         .btn-secondary {
@@ -267,8 +236,7 @@
 
         .btn-secondary:hover {
             background: linear-gradient(135deg, #e2e8f0, #cbd5e1);
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+            transform: translateY(-1px);
         }
 
         .notes {
@@ -323,58 +291,14 @@
         }
 
         /* Header severity indication */
-        .header.severity-critical {
-            background: linear-gradient(135deg, #7f1d1d 0%, #991b1b 100%);
-        }
-
-        .header.severity-high {
-            background: linear-gradient(135deg, #9a3412 0%, #c2410c 100%);
-        }
-
-        .header.severity-medium {
-            background: linear-gradient(135deg, #a16207 0%, #ca8a04 100%);
-        }
-
-        .header.severity-low {
-            background: linear-gradient(135deg, #15803d 0%, #16a34a 100%);
-        }
-
-        .header.severity-none {
-            background: linear-gradient(135deg, #374151 0%, #4b5563 100%);
-        }
-
-        @media (max-width: 768px) {
-            .metrics-grid {
-                grid-template-columns: 1fr;
-                gap: 20px;
-            }
-            
-            .results-grid {
-                grid-template-columns: 1fr;
-                gap: 20px;
-            }
-
-            .button-group {
-                flex-direction: column;
-            }
-
-            .metric-btn {
-                width: 100%;
-                text-align: left;
-            }
-
-            .action-buttons {
-                flex-direction: column;
-            }
-
-            .header h1 {
-                font-size: 2rem;
-            }
-        }
+        .header.severity-critical { background: linear-gradient(135deg, #7f1d1d 0%, #991b1b 100%); }
+        .header.severity-high { background: linear-gradient(135deg, #9a3412 0%, #c2410c 100%); }
+        .header.severity-medium { background: linear-gradient(135deg, #a16207 0%, #ca8a04 100%); }
+        .header.severity-low { background: linear-gradient(135deg, #15803d 0%, #16a34a 100%); }
+        .header.severity-none { background: linear-gradient(135deg, #374151 0%, #4b5563 100%); }
 
         .tooltip {
             position: relative;
-            cursor: help;
         }
 
         .tooltip::after {
@@ -385,15 +309,14 @@
             transform: translateX(-50%);
             background: rgba(0,0,0,0.9);
             color: white;
-            padding: 10px 15px;
-            border-radius: 8px;
-            font-size: 0.85rem;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 0.8rem;
             white-space: nowrap;
             opacity: 0;
             pointer-events: none;
-            transition: opacity 0.3s;
+            transition: opacity 0.2s;
             z-index: 1000;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
         }
 
         .tooltip:hover::after {
@@ -441,6 +364,54 @@
             margin: 15px 0;
             border-radius: 0 8px 8px 0;
         }
+
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 20px;
+            border-radius: 8px;
+            color: white;
+            z-index: 3000;
+            animation: slideIn 0.3s ease;
+        }
+
+        .notification-success { background: #10b981; }
+        .notification-info { background: #3b82f6; }
+
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        @media (max-width: 768px) {
+            .metrics-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .results-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .button-group {
+                flex-direction: column;
+            }
+
+            .metric-btn {
+                width: 100%;
+                text-align: left;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+
+            .header h1 {
+                font-size: 2rem;
+            }
+        }
     </style>
 </head>
 <body>
@@ -459,35 +430,35 @@
                     <div class="metric-group">
                         <div class="metric-label">Attack Vector (AV)</div>
                         <div class="button-group">
-                            <button class="metric-btn tooltip active" data-tooltip="0.85" data-metric="av" data-value="network" onclick="selectMetric(this)">Network (N)</button>
-                            <button class="metric-btn tooltip" data-tooltip="0.62" data-metric="av" data-value="adjacent" onclick="selectMetric(this)">Adjacent (A)</button>
-                            <button class="metric-btn tooltip" data-tooltip="0.55" data-metric="av" data-value="local" onclick="selectMetric(this)">Local (L)</button>
-                            <button class="metric-btn tooltip" data-tooltip="0.20" data-metric="av" data-value="physical" onclick="selectMetric(this)">Physical (P)</button>
+                            <button class="metric-btn tooltip active" data-tooltip="0.85" data-metric="av" data-value="network">Network (N)</button>
+                            <button class="metric-btn tooltip" data-tooltip="0.62" data-metric="av" data-value="adjacent">Adjacent (A)</button>
+                            <button class="metric-btn tooltip" data-tooltip="0.55" data-metric="av" data-value="local">Local (L)</button>
+                            <button class="metric-btn tooltip" data-tooltip="0.20" data-metric="av" data-value="physical">Physical (P)</button>
                         </div>
                     </div>
 
                     <div class="metric-group">
                         <div class="metric-label">Attack Complexity (AC)</div>
                         <div class="button-group">
-                            <button class="metric-btn tooltip active" data-tooltip="0.77" data-metric="ac" data-value="low" onclick="selectMetric(this)">Low (L)</button>
-                            <button class="metric-btn tooltip" data-tooltip="0.44" data-metric="ac" data-value="high" onclick="selectMetric(this)">High (H)</button>
+                            <button class="metric-btn tooltip active" data-tooltip="0.77" data-metric="ac" data-value="low">Low (L)</button>
+                            <button class="metric-btn tooltip" data-tooltip="0.44" data-metric="ac" data-value="high">High (H)</button>
                         </div>
                     </div>
 
                     <div class="metric-group">
                         <div class="metric-label">Privileges Required (PR)</div>
                         <div class="button-group">
-                            <button class="metric-btn tooltip" data-tooltip="0.85" data-metric="pr" data-value="none" onclick="selectMetric(this)">None (N)</button>
-                            <button class="metric-btn tooltip active" data-tooltip="0.62/0.68" data-metric="pr" data-value="low" onclick="selectMetric(this)">Low (L)</button>
-                            <button class="metric-btn tooltip" data-tooltip="0.27/0.50" data-metric="pr" data-value="high" onclick="selectMetric(this)">High (H)</button>
+                            <button class="metric-btn tooltip" data-tooltip="0.85" data-metric="pr" data-value="none">None (N)</button>
+                            <button class="metric-btn tooltip active" data-tooltip="0.62/0.68" data-metric="pr" data-value="low">Low (L)</button>
+                            <button class="metric-btn tooltip" data-tooltip="0.27/0.50" data-metric="pr" data-value="high">High (H)</button>
                         </div>
                     </div>
 
                     <div class="metric-group">
                         <div class="metric-label">User Interaction (UI)</div>
                         <div class="button-group">
-                            <button class="metric-btn tooltip active" data-tooltip="0.85" data-metric="ui" data-value="none" onclick="selectMetric(this)">None (N)</button>
-                            <button class="metric-btn tooltip" data-tooltip="0.62" data-metric="ui" data-value="required" onclick="selectMetric(this)">Required (R)</button>
+                            <button class="metric-btn tooltip active" data-tooltip="0.85" data-metric="ui" data-value="none">None (N)</button>
+                            <button class="metric-btn tooltip" data-tooltip="0.62" data-metric="ui" data-value="required">Required (R)</button>
                         </div>
                     </div>
                 </div>
@@ -499,35 +470,35 @@
                     <div class="metric-group">
                         <div class="metric-label">Scope (S)</div>
                         <div class="button-group">
-                            <button class="metric-btn tooltip active" data-tooltip="Unchanged" data-metric="scope" data-value="unchanged" onclick="selectMetric(this)">Unchanged (U)</button>
-                            <button class="metric-btn tooltip" data-tooltip="Changed" data-metric="scope" data-value="changed" onclick="selectMetric(this)">Changed (C)</button>
+                            <button class="metric-btn tooltip active" data-tooltip="Unchanged" data-metric="scope" data-value="unchanged">Unchanged (U)</button>
+                            <button class="metric-btn tooltip" data-tooltip="Changed" data-metric="scope" data-value="changed">Changed (C)</button>
                         </div>
                     </div>
 
                     <div class="metric-group">
                         <div class="metric-label">Confidentiality (C)</div>
                         <div class="button-group">
-                            <button class="metric-btn tooltip" data-tooltip="0.00" data-metric="conf" data-value="none" onclick="selectMetric(this)">None (N)</button>
-                            <button class="metric-btn tooltip" data-tooltip="0.22" data-metric="conf" data-value="low" onclick="selectMetric(this)">Low (L)</button>
-                            <button class="metric-btn tooltip active" data-tooltip="0.56" data-metric="conf" data-value="high" onclick="selectMetric(this)">High (H)</button>
+                            <button class="metric-btn tooltip" data-tooltip="0.00" data-metric="conf" data-value="none">None (N)</button>
+                            <button class="metric-btn tooltip" data-tooltip="0.22" data-metric="conf" data-value="low">Low (L)</button>
+                            <button class="metric-btn tooltip active" data-tooltip="0.56" data-metric="conf" data-value="high">High (H)</button>
                         </div>
                     </div>
 
                     <div class="metric-group">
                         <div class="metric-label">Integrity (I)</div>
                         <div class="button-group">
-                            <button class="metric-btn tooltip active" data-tooltip="0.00" data-metric="integ" data-value="none" onclick="selectMetric(this)">None (N)</button>
-                            <button class="metric-btn tooltip" data-tooltip="0.22" data-metric="integ" data-value="low" onclick="selectMetric(this)">Low (L)</button>
-                            <button class="metric-btn tooltip" data-tooltip="0.56" data-metric="integ" data-value="high" onclick="selectMetric(this)">High (H)</button>
+                            <button class="metric-btn tooltip active" data-tooltip="0.00" data-metric="integ" data-value="none">None (N)</button>
+                            <button class="metric-btn tooltip" data-tooltip="0.22" data-metric="integ" data-value="low">Low (L)</button>
+                            <button class="metric-btn tooltip" data-tooltip="0.56" data-metric="integ" data-value="high">High (H)</button>
                         </div>
                     </div>
 
                     <div class="metric-group">
                         <div class="metric-label">Availability (A)</div>
                         <div class="button-group">
-                            <button class="metric-btn tooltip active" data-tooltip="0.00" data-metric="avail" data-value="none" onclick="selectMetric(this)">None (N)</button>
-                            <button class="metric-btn tooltip" data-tooltip="0.22" data-metric="avail" data-value="low" onclick="selectMetric(this)">Low (L)</button>
-                            <button class="metric-btn tooltip" data-tooltip="0.56" data-metric="avail" data-value="high" onclick="selectMetric(this)">High (H)</button>
+                            <button class="metric-btn tooltip active" data-tooltip="0.00" data-metric="avail" data-value="none">None (N)</button>
+                            <button class="metric-btn tooltip" data-tooltip="0.22" data-metric="avail" data-value="low">Low (L)</button>
+                            <button class="metric-btn tooltip" data-tooltip="0.56" data-metric="avail" data-value="high">High (H)</button>
                         </div>
                     </div>
                 </div>
@@ -554,8 +525,8 @@
             </div>
 
             <div class="action-buttons">
-                <button class="action-btn btn-primary" onclick="loadMySQLScenario()">Load MySQL Scenario</button>
-                <button class="action-btn btn-secondary" onclick="openNVDReference()">NVD CVSS v3.1 Reference</button>
+                <button class="action-btn btn-primary" id="mysqlBtn">Load MySQL Scenario</button>
+                <button class="action-btn btn-secondary" id="nvdBtn">NVD CVSS v3.1 Reference</button>
             </div>
 
             <div class="notes">
@@ -567,7 +538,7 @@
     <!-- Modal for MySQL Scenario -->
     <div id="mysqlModal" class="modal">
         <div class="modal-content">
-            <span class="close" onclick="closeModal()">&times;</span>
+            <span class="close" id="closeBtn">&times;</span>
             <h2>MySQL Server SQL Injection Vulnerability</h2>
             <div class="mysql-scenario">
                 <p><strong>Scenario:</strong> A vulnerability in the MySQL Server database could allow a remote, authenticated user to inject SQL code that runs with user privileges on a remote MySQL Server database. A successful attack could allow any data in the remote MySQL database to be read only (not modified). The vulnerability occurs due to insufficient validation of user-supplied data but it is not replicated to remote MySQL Server instances.</p>
@@ -583,7 +554,7 @@
                 <li><strong>Integrity:</strong> None (N) - Cannot modify data</li>
                 <li><strong>Availability:</strong> None (N) - No impact on availability</li>
             </ul>
-            <button class="action-btn btn-primary" onclick="applyMySQLScenario()">Apply These Settings</button>
+            <button class="action-btn btn-primary" id="applyBtn">Apply These Settings</button>
         </div>
     </div>
 
@@ -683,10 +654,10 @@
             document.getElementById('baseScore').textContent = baseScore.toFixed(1);
             
             // Update severity coloring
-            updateSeverityColors(exploitability, impact, baseScore);
+            updateSeverityColors(baseScore);
         }
 
-        function updateSeverityColors(exploitability, impact, baseScore) {
+        function updateSeverityColors(baseScore) {
             const header = document.getElementById('mainHeader');
             const exploitabilityCard = document.getElementById('exploitabilityCard');
             const impactCard = document.getElementById('impactCard');
@@ -719,105 +690,18 @@
             baseCard.classList.add(severityClass);
         }
 
-        function loadMySQLScenario() {
-            document.getElementById('mysqlModal').style.display = 'block';
-        }
-
-        function closeModal() {
-            document.getElementById('mysqlModal').style.display = 'none';
-        }
-
-        function applyMySQLScenario() {
-            // Reset all selections first
-            document.querySelectorAll('.metric-btn.active').forEach(btn => btn.classList.remove('active'));
-            
-            // Apply MySQL scenario settings
-            const mysqlSettings = {
-                av: 'network',      // Network attack
-                ac: 'low',          // Low complexity
-                pr: 'low',          // Requires authentication (low privileges)
-                ui: 'none',         // No user interaction
-                scope: 'unchanged', // Same security authority
-                conf: 'high',       // Can read all data
-                integ: 'none',      // Cannot modify data
-                avail: 'none'       // No availability impact
-            };
-            
-            // Update selections and UI
-            Object.keys(mysqlSettings).forEach(metric => {
-                selections[metric] = mysqlSettings[metric];
-                const button = document.querySelector(`[data-metric="${metric}"][data-value="${mysqlSettings[metric]}"]`);
-                if (button) {
-                    button.classList.add('active');
-                }
-            });
-            
-            // Recalculate scores
-            calculateScores();
-            
-            // Close modal
-            closeModal();
-            
-            // Show success message
-            showNotification('MySQL scenario applied successfully!', 'success');
-        }
-
-        function openNVDReference() {
-            window.open('https://nvd.nist.gov/vuln-metrics/cvss/v3-calculator', '_blank');
-        }
-
         function showNotification(message, type = 'info') {
-            // Create notification element
+            // Remove existing notifications
+            const existing = document.querySelectorAll('.notification');
+            existing.forEach(n => n.remove());
+
+            // Create notification
             const notification = document.createElement('div');
             notification.className = `notification notification-${type}`;
             notification.innerHTML = `
-                <div class="notification-content">
-                    <span>${message}</span>
-                    <button class="notification-close" onclick="this.parentElement.parentElement.remove()">&times;</button>
-                </div>
+                <span>${message}</span>
+                <button style="background:none;border:none;color:white;margin-left:10px;cursor:pointer;" onclick="this.parentElement.remove()">&times;</button>
             `;
-            
-            // Add notification styles
-            notification.style.cssText = `
-                position: fixed;
-                top: 20px;
-                right: 20px;
-                background: ${type === 'success' ? '#10b981' : '#3b82f6'};
-                color: white;
-                padding: 15px 20px;
-                border-radius: 8px;
-                box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-                z-index: 3000;
-                animation: slideIn 0.3s ease;
-            `;
-            
-            // Add styles for notification
-            if (!document.getElementById('notification-styles')) {
-                const style = document.createElement('style');
-                style.id = 'notification-styles';
-                style.textContent = `
-                    @keyframes slideIn {
-                        from { transform: translateX(100%); opacity: 0; }
-                        to { transform: translateX(0); opacity: 1; }
-                    }
-                    .notification-content {
-                        display: flex;
-                        align-items: center;
-                        gap: 10px;
-                    }
-                    .notification-close {
-                        background: none;
-                        border: none;
-                        color: white;
-                        font-size: 18px;
-                        cursor: pointer;
-                        padding: 0;
-                        width: 20px;
-                        height: 20px;
-                    }
-                `;
-                document.head.appendChild(style);
-            }
             
             document.body.appendChild(notification);
             
@@ -829,34 +713,78 @@
             }, 3000);
         }
 
-        // Close modal when clicking outside
-        window.onclick = function(event) {
-            const modal = document.getElementById('mysqlModal');
-            if (event.target === modal) {
-                closeModal();
-            }
-        }
-
-        // Initialize calculations on load
+        // Initialize event listeners
         document.addEventListener('DOMContentLoaded', function() {
-            calculateScores();
-            
-            // Add some intro animation
-            document.querySelector('.container').style.animation = 'fadeInUp 0.6s ease';
-            
-            // Add fadeInUp animation
-            const style = document.createElement('style');
-            style.textContent = `
-                @keyframes fadeInUp {
-                    from {
-                        opacity: 0;
-                        transform: translateY(30px);
+            // Metric button event listeners
+            const metricButtons = document.querySelectorAll('.metric-btn');
+            metricButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    selectMetric(this);
+                });
+            });
+
+            // MySQL scenario button
+            document.getElementById('mysqlBtn').addEventListener('click', function() {
+                document.getElementById('mysqlModal').style.display = 'block';
+            });
+
+            // Close modal button
+            document.getElementById('closeBtn').addEventListener('click', function() {
+                document.getElementById('mysqlModal').style.display = 'none';
+            });
+
+            // Apply MySQL scenario button
+            document.getElementById('applyBtn').addEventListener('click', function() {
+                // Reset all selections first
+                document.querySelectorAll('.metric-btn.active').forEach(btn => btn.classList.remove('active'));
+                
+                // Apply MySQL scenario settings
+                const mysqlSettings = {
+                    av: 'network',
+                    ac: 'low',
+                    pr: 'low',
+                    ui: 'none',
+                    scope: 'unchanged',
+                    conf: 'high',
+                    integ: 'none',
+                    avail: 'none'
+                };
+                
+                // Update selections and UI
+                Object.keys(mysqlSettings).forEach(metric => {
+                    selections[metric] = mysqlSettings[metric];
+                    const button = document.querySelector(`[data-metric="${metric}"][data-value="${mysqlSettings[metric]}"]`);
+                    if (button) {
+                        button.classList.add('active');
                     }
-                    to {
-                        opacity: 1;
-                        transform: translateY(0);
-                    }
+                });
+                
+                // Recalculate scores
+                calculateScores();
+                
+                // Close modal
+                document.getElementById('mysqlModal').style.display = 'none';
+                
+                // Show success message
+                showNotification('MySQL scenario applied successfully!', 'success');
+            });
+
+            // NVD reference button
+            document.getElementById('nvdBtn').addEventListener('click', function() {
+                window.open('https://nvd.nist.gov/vuln-metrics/cvss/v3-calculator', '_blank');
+            });
+
+            // Close modal when clicking outside
+            window.addEventListener('click', function(event) {
+                const modal = document.getElementById('mysqlModal');
+                if (event.target === modal) {
+                    modal.style.display = 'none';
                 }
-            `;
-            document.head.appendChild(style);
+            });
+
+            // Initial calculation
+            calculateScores();
         });
+    </script>
+</body>
+</html>
