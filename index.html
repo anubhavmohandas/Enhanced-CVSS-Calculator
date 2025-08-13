@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enhanced CVSS Exploitability Calculator</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0f0f23 0%, #1a1a3e 50%, #2d2d5f 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #ffffff;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            border: 1px solid rgba(255,255,255,0.2);
+            box-shadow: 0 30px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 40px 30px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            animation: rotate 20s linear infinite;
+        }
+
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .header h1 {
+            font-size: 2.8em;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            position: relative;
+            z-index: 1;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.95;
+            max-width: 700px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+            line-height: 1.6;
+        }
+
+        .content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            padding: 40px;
+        }
+
+        .section {
+            background: linear-gradient(135deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.04) 100%);
+            padding: 30px;
+            border-radius: 15px;
+            border: 1px solid rgba(255,255,255,0.1);
+            backdrop-filter: blur(5px);
+            transition: all 0.3s ease;
+        }
+
+        .section:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+        }
+
+        .section h2 {
+            color: #ffffff;
+            margin-bottom: 30px;
+            font-size: 1.6em;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 15px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+        }
+
+        .metric-group {
+            margin-bottom: 25px;
+            position: relative;
+        }
+
+        .metric-group label {
+            display: block;
+            font-weight: 600;
+            color: #e2e8f0;
+            margin-bottom: 10px;
+            font-size: 1em;
+        }
+
+        .metric-group select {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid rgba(255,255,255,0.2);
+            border-radius: 10px;
+            font-size: 1em;
+            background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%);
+            color: #ffffff;
+            backdrop-filter: blur(5px);
+            transition: all 0.3s ease;
+        }
+
+        .metric-group select:focus {
+            border-color: #667eea;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.3);
+            transform: scale(1.02);
+        }
+
+        .metric-group select:hover {
+            border-color: #667eea;
+            transform: translateY(-2px);
+        }
+
+        .metric-group select option {
+            background: #1a1a3e;
+            color: #ffffff;
+            padding: 10px;
+        }
+
+        .formula-box {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            box-shadow: 0 10px 25px rgba(240, 147, 251, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .formula-box::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            animation: shimmer 2s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+
+        .formula-box h3 {
+            margin-bottom: 15px;
+            font-size: 1.3em;
+            position: relative;
+            z-index: 1;
+        }
+
+        .formula-box code {
+            background: rgba(255,255,255,0.15);
+            padding: 12px 16px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 1.1em;
+            display: block;
+            position: relative;
+            z-index: 1;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .calculation-box {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .calculation-box::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
+            animation: shimmerReverse 2.5s infinite;
+        }
+
+        @keyframes shimmerReverse {
+            0% { right: -100%; }
+            100% { right: 100%; }
+        }
+
+        .calculation-box h3 {
+            margin-bottom: 15px;
+            font-size: 1.3em;
+            position: relative;
+            z-index: 1;
+        }
+
+        .calculation-box code {
+            background: rgba(255,255,255,0.15);
+            padding: 12px 16px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 1em;
+            display: block;
+            word-break: break-all;
+            position: relative;
+            z-index: 1;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .score-display {
+            padding: 35px;
+            border-radius: 15px;
+            margin-bottom: 25px;
+            text-align: center;
+            border: 3px solid;
+            transition: all 0.5s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .score-display::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            animation: pulse 3s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.5; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.05); }
+        }
+
+        .score-display h3 {
+            margin-bottom: 20px;
+            font-size: 1.4em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .score-display .score {
+            font-size: 3.5em;
+            font-weight: bold;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 1;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .score-display .risk-level {
+            font-size: 1.2em;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .risk-critical {
+            background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+            color: #ffffff;
+            border-color: #fca5a5;
+            box-shadow: 0 0 30px rgba(220, 38, 38, 0.5);
+        }
+
+        .risk-high {
+            background: linear-gradient(135deg, #ea580c 0%, #c2410c 100%);
+            color: #ffffff;
+            border-color: #fdba74;
+            box-shadow: 0 0 30px rgba(234, 88, 12, 0.5);
+        }
+
+        .risk-medium {
+            background: linear-gradient(135deg, #d97706 0%, #b45309 100%);
+            color: #ffffff;
+            border-color: #fcd34d;
+            box-shadow: 0 0 30px rgba(217, 119, 6, 0.5);
+        }
+
+        .risk-low {
+            background: linear-gradient(135deg, #16a34a 0%, #15803d 100%);
+            color: #ffffff;
+            border-color: #86efac;
+            box-shadow: 0 0 30px rgba(22, 163, 74, 0.5);
+        }
+
+        .risk-none {
+            background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%);
+            color: #94a3b8;
+            border-color: rgba(255,255,255,0.2);
+        }
+
+        .guidelines {
+            background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%);
+            padding: 25px;
+            border-radius: 12px;
+            border: 1px solid rgba(255,255,255,0.2);
+            backdrop-filter: blur(5px);
+        }
+
+        .guidelines h3 {
+            color: #ffffff;
+            margin-bottom: 20px;
+            font-size: 1.3em;
+        }
+
+        .guideline-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            transition: all 0.3s ease;
+        }
+
+        .guideline-item:hover {
+            transform: translateX(10px);
+            padding-left: 10px;
+        }
+
+        .guideline-item:last-child {
+            border-bottom: none;
+        }
+
+        .reset-btn {
+            width: 100%;
+            padding: 18px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.2em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 25px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .reset-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: all 0.3s ease;
+        }
+
+        .reset-btn:hover::before {
+            left: 100%;
+        }
+
+        .reset-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        .assessment-box {
+            background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+            color: #ffffff;
+            padding: 25px;
+            border-radius: 12px;
+            margin-top: 25px;
+            border-left: 5px solid #f97316;
+            box-shadow: 0 10px 25px rgba(251, 191, 36, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .assessment-box::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, transparent 49%, rgba(255,255,255,0.1) 50%, transparent 51%);
+            background-size: 20px 20px;
+            animation: stripes 1s linear infinite;
+        }
+
+        @keyframes stripes {
+            0% { background-position: 0 0; }
+            100% { background-position: 20px 0; }
+        }
+
+        .assessment-box h3 {
+            margin-bottom: 15px;
+            font-weight: 600;
+            font-size: 1.3em;
+            position: relative;
+            z-index: 1;
+        }
+
+        .assessment-box p {
+            position: relative;
+            z-index: 1;
+            line-height: 1.6;
+        }
+
+        .shield-icon, .calculator-icon, .warning-icon {
+            width: 28px;
+            height: 28px;
+            filter: drop-shadow(1px 1px 2px rgba(0,0,0,0.3));
+        }
+
+        .version-info {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(0,0,0,0.7);
+            color: #ffffff;
+            padding: 10px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        @media (max-width: 768px) {
+            .content {
+                grid-template-columns: 1fr;
+                gap: 20px;
+                padding: 20px;
+            }
+            
+            .header h1 {
+                font-size: 2.2em;
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .score-display .score {
+                font-size: 3em;
+            }
+
+            .version-info {
+                position: static;
+                margin-top: 20px;
+                text-align: center;
+            }
+        }
+
+        .tooltip {
+            position: relative;
+            cursor: help;
+        }
+
+        .tooltip::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            bottom: 125%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0,0,0,0.9);
+            color: white;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 0.9em;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s;
+            z-index: 1000;
+        }
+
+        .tooltip:hover::after {
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>
+                <svg class="shield-icon" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/>
+                </svg>
+                Enhanced CVSS Exploitability Calculator
+            </h1>
+            <p>Calculate the exploitability component of CVSS Base Score with enhanced visual feedback and detailed risk assessment based on Attack Vector, Attack Complexity, Privileges Required, and User Interaction metrics.</p>
+        </div>
+
+        <div class="content">
+            <!-- Input Section -->
+            <div class="section">
+                <h2>Base Metrics Configuration</h2>
+                
+                <div class="metric-group">
+                    <label for="attackVector" class="tooltip" data-tooltip="How the vulnerability can be exploited">Attack Vector (AV)</label>
+                    <select id="attackVector">
+                        <option value="">Select Attack Vector</option>
+                        <option value="network">Network (N) - 0.85 - Exploitable remotely</option>
+                        <option value="adjacent">Adjacent (A) - 0.62 - Same network segment</option>
+                        <option value="local">Local (L) - 0.55 - Local system access required</option>
+                        <option value="physical">Physical (P) - 0.20 - Physical access required</option>
+                    </select>
+                </div>
+
+                <div class="metric-group">
+                    <label for="attackComplexity" class="tooltip" data-tooltip="Conditions beyond attacker's control that must exist">Attack Complexity (AC)</label>
+                    <select id="attackComplexity">
+                        <option value="">Select Attack Complexity</option>
+                        <option value="low">Low (L) - 0.77 - No special conditions</option>
+                        <option value="high">High (H) - 0.44 - Special conditions required</option>
+                    </select>
+                </div>
+
+                <div class="metric-group">
+                    <label for="scope" class="tooltip" data-tooltip="Whether exploitation affects components beyond the vulnerable one">Scope (S) - affects PR calculation</label>
+                    <select id="scope">
+                        <option value="unchanged">Unchanged (U) - Same authorization scope</option>
+                        <option value="changed">Changed (C) - Different authorization scope</option>
+                    </select>
+                </div>
+
+                <div class="metric-group">
+                    <label for="privilegesRequired" class="tooltip" data-tooltip="Level of privileges attacker must possess">Privileges Required (PR)</label>
+                    <select id="privilegesRequired">
+                        <option value="">Select Privileges Required</option>
+                        <option value="none">None (N) - 0.85 - No privileges needed</option>
+                        <option value="low" data-unchanged="0.62" data-changed="0.68">Low (L) - Basic user privileges</option>
+                        <option value="high" data-unchanged="0.27" data-changed="0.50">High (H) - Administrative privileges</option>
+                    </select>
+                </div>
+
+                <div class="metric-group">
+                    <label for="userInteraction" class="tooltip" data-tooltip="Whether exploitation requires user participation">User Interaction (UI)</label>
+                    <select id="userInteraction">
+                        <option value="">Select User Interaction</option>
+                        <option value="none">None (N) - 0.85 - No user interaction needed</option>
+                        <option value="required">Required (R) - 0.62 - User must participate</option>
+                    </select>
+                </div>
+
+                <button class="reset-btn" onclick="resetCalculator()">🔄 Reset Calculator</button>
+            </div>
+
+            <!-- Results Section -->
+            <div class="section">
+                <h2>Calculation Results & Analysis</h2>
+                
+                <div class="formula-box">
+                    <h3>📐 Exploitability Formula:</h3>
+                    <code>Exploitability = 8.22 × AV × AC × PR × UI</code>
+                </div>
+
+                <div class="calculation-box">
+                    <h3>🧮 Current Calculation:</h3>
+                    <code id="calculationDisplay">Select all metrics to see calculation</code>
+                </div>
+
+                <div id="scoreDisplay" class="score-display risk-none">
+                    <h3>
+                        <svg class="calculator-icon" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-2h2v2zm0-4H7v-2h2v2zm0-4H7V7h2v2zm4 8h-2v-2h2v2zm0-4h-2v-2h2v2zm0-4h-2V7h2v2zm4 8h-2v-6h2v6zm0-8h-2V7h2v2z"/>
+                        </svg>
+                        Exploitability Score
+                    </h3>
+                    <div class="score" id="scoreValue">0.00</div>
+                    <div class="risk-level" id="riskLevel" style="display: none;">
+                        <svg class="warning-icon" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/>
+                        </svg>
+                        <span id="riskText">Risk Level: None</span>
+                    </div>
+                </div>
+
+                <div class="guidelines">
+                    <h3>📊 Risk Level Guidelines:</h3>
+                    <div class="guideline-item">
+                        <span style="font-weight: 600; color: #dc2626;">🔴 Critical:</span>
+                        <span>≥ 6.0</span>
+                    </div>
+                    <div class="guideline-item">
+                        <span style="font-weight: 600; color: #ea580c;">🟠 High:</span>
+                        <span>4.0 - 5.9</span>
+                    </div>
+                    <div class="guideline-item">
+                        <span style="font-weight: 600; color: #d97706;">🟡 Medium:</span>
+                        <span>2.0 - 3.9</span>
+                    </div>
+                    <div class="guideline-item">
+                        <span style="font-weight: 600; color: #16a34a;">🟢 Low:</span>
+                        <span>< 2.0</span>
+                    </div>
+                </div>
+
+                <div id="assessmentBox" class="assessment-box" style="display: none;">
+                    <h3>⚠️ Risk Assessment:</h3>
+                    <p id="assessmentText"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="version-info">
+        Enhanced v2.0 | CVSS v3.1 Compatible
+    </div>
+
+    <script>
+        // Enhanced metric values with improved precision
+        const metricValues = {
+            attackVector: {
+                network: 0.85,
+                adjacent: 0.62,
+                local: 0.55,
+                physical: 0.2
+            },
+            attackComplexity: {
+                low: 0.77,
+                high: 0.44
+            },
+            privilegesRequired: {
+                none: 0.85,
+                low: { unchanged: 0.62, changed: 0.68 },
+                high: { unchanged: 0.27, changed: 0.5 }
+            },
+            userInteraction: {
+                none: 0.85,
+                required: 0.62
+            }
+        };
+
+        // Enhanced assessment messages
+        const assessmentMessages = {
+            critical: [
+                'This vulnerability has critical exploitability with maximum risk exposure. Immediate remediation is required.',
+                'Deploy emergency patches and implement temporary mitigations immediately.',
+                'Consider taking affected systems offline until patches can be applied.'
+            ],
+            high: [
+                'This vulnerability has high exploitability and poses significant risk to your environment.',
+                'Prioritize remediation within 24-48 hours and implement monitoring for exploitation attempts.',
+                'Review access controls and network segmentation to limit exposure.'
+            ],
+            medium: [
+                'This vulnerability has medium exploitability requiring planned remediation.',
+                'Schedule patching within the next maintenance window and monitor for unusual activity.',
+                'Implement additional security layers if immediate patching is not feasible.'
+            ],
+            low: [
+                'This vulnerability has low exploitability with limited immediate risk.',
+                'Include in regular patching cycles and maintain awareness of potential escalation vectors.',
+                'Monitor security advisories for changes in threat landscape.'
+            ]
+        };
+
+        function updatePrivilegesRequiredOptions() {
+            const scope = document.getElementById('scope').value;
+            const prSelect = document.getElementById('privilegesRequired');
+            const lowOption = prSelect.querySelector('option[value="low"]');
+            const highOption = prSelect.querySelector('option[value="high"]');
+            
+            if (scope === 'changed') {
+                lowOption.textContent = 'Low (L) - 0.68 - Basic user privileges';
+                highOption.textContent = 'High (H) - 0.50 - Administrative privileges';
+            } else {
+                lowOption.textContent = 'Low (L) - 0.62 - Basic user privileges';
+                highOption.textContent = 'High (H) - 0.27 - Administrative privileges';
+            }
+            
+            calculateExploitability();
+        }
+
+        function calculateExploitability() {
+            const av = document.getElementById('attackVector').value;
+            const ac = document.getElementById('attackComplexity').value;
+            const pr = document.getElementById('privilegesRequired').value;
+            const ui = document.getElementById('userInteraction').value;
+            const scope = document.getElementById('scope').value;
+
+            if (!av || !ac || !pr || !ui) {
+                document.getElementById('scoreValue').textContent = '0.00';
+                document.getElementById('calculationDisplay').textContent = 'Select all metrics to see calculation';
+                document.getElementById('scoreDisplay').className = 'score-display risk-none';
+                document.getElementById('riskLevel').style.display = 'none';
+                document.getElementById('assessmentBox').style.display = 'none';
+                return;
+            }
+
+            const avValue = metricValues.attackVector[av];
+            const acValue = metricValues.attackComplexity[ac];
+            const uiValue = metricValues.userInteraction[ui];
+            
+            let prValue;
+            if (pr === 'none') {
+                prValue = metricValues.privilegesRequired.none;
+            } else {
+                prValue = metricValues.privilegesRequired[pr][scope];
+            }
+
+            // Enhanced exploitability calculation with precision
+            const exploitability = parseFloat((8.22 * avValue * acValue * prValue * uiValue).toFixed(3));
+
+            // Update calculation display with enhanced formatting
+            const calculation = `8.22 × ${avValue.toFixed(2)} × ${acValue.toFixed(2)} × ${prValue.toFixed(2)} × ${uiValue.toFixed(2)} = ${exploitability.toFixed(2)}`;
+            document.getElementById('calculationDisplay').textContent = calculation;
+
+            // Update score with animation
+            const scoreElement = document.getElementById('scoreValue');
+            scoreElement.style.transform = 'scale(1.1)';
+            setTimeout(() => {
+                scoreElement.textContent = exploitability.toFixed(2);
+                scoreElement.style.transform = 'scale(1)';
+            }, 150);
+
+            // Enhanced risk level determination
+            let riskLevel, riskClass, assessmentTexts;
+            if (exploitability >= 6.0) {
+                riskLevel = 'Critical';
+                riskClass = 'risk-critical';
+                assessmentTexts = assessmentMessages.critical;
+            } else if (exploitability >= 4.0) {
+                riskLevel = 'High';
+                riskClass = 'risk-high';
+                assessmentTexts = assessmentMessages.high;
+            } else if (exploitability >= 2.0) {
+                riskLevel = 'Medium';
+                riskClass = 'risk-medium';
+                assessmentTexts = assessmentMessages.medium;
+            } else {
+                riskLevel = 'Low';
+                riskClass = 'risk-low';
+                assessmentTexts = assessmentMessages.low;
+            }
+
+            // Animate risk level change
+            const scoreDisplay = document.getElementById('scoreDisplay');
+            scoreDisplay.style.transform = 'scale(0.95)';
+            setTimeout(() => {
+                scoreDisplay.className = 'score-display ' + riskClass;
+                scoreDisplay.style.transform = 'scale(1)';
+            }, 200);
+
+            // Update UI with enhanced content
+            document.getElementById('riskLevel').style.display = 'flex';
+            document.getElementById('riskText').textContent = 'Risk
