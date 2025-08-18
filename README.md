@@ -303,3 +303,20 @@ Create your own scenario:
 ---
 
 **Ready to start?** Open the calculator and click "Load MySQL Scenario" to see your first real vulnerability score! 🎯
+
+
+---
+## 🌟 Connect with Us
+
+### 🌐 Community Links
+- **GitHub:** [https://github.com/anubhavmohandas](https://github.com/anubhavmohandas)
+- **LinkedIn:** [https://www.linkedin.com/in/anubhavmohandas/](https://www.linkedin.com/in/anubhavmohandas/)
+
+### 📧 Contact
+- **Personal Email:** reachme.anubhav@gmail.com
+- **GitHub Username:** anubhavmohandas
+
+---
+
+**Disclaimer:** Do not use any of the tool for any illegal purposes.
+
