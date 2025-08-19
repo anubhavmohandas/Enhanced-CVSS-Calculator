@@ -320,3 +320,6 @@ Create your own scenario:
 
 **Disclaimer:** Do not use any of the tool for any illegal purposes.
 
+--- 
+💡 Made with ❤️ for Cybersecurity Professionals
+
